@@ -7,8 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using static MetaDatabaseLibrary.DBLogic.CompressMetadata;
-namespace MetaDatabaseLibrary.DBLogic
+namespace UpdateMetadata
 {
     public static class NameLibrary
     {
@@ -22,10 +21,6 @@ namespace MetaDatabaseLibrary.DBLogic
             Tables.Datasets.tableName = await Tables.GetTableNames(2).ConfigureAwait(false);
 
             #endregion
-
-
-
-
 
             #region RawMetadata
             Tables.RawMetadata.tableName = await Tables.GetTableNames(3).ConfigureAwait(false);

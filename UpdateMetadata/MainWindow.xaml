@@ -5,12 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateMetadata"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        Title="Metadata Update Tool" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         
+        <TextBlock Text="Metadata Update Tool" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Margin="0,0,0,20"/>
+        
+        <StackPanel Grid.Row="1" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center">
+            <Button x:Name="SyncButton" 
+                    Content="Sync Y Drive to Database" 
+                    Width="250" 
+                    Height="50" 
+                    FontSize="16" 
+                    Margin="0,0,0,20"
+                    Click="SyncButton_Click"/>
+            
+            <TextBlock x:Name="StatusText" 
+                       Text="Ready to sync" 
+                       FontSize="14" 
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+        
+        <TextBlock Grid.Row="2" 
+                   Text="© 2023 Metadata Update Tool" 
+                   FontSize="10" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,10,0,0"/>
     </Grid>
 </Window>

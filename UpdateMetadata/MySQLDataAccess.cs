@@ -5,15 +5,17 @@ using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Diagnostics;
 using System.Collections;
-namespace MetaDatabaseLibrary.DBLogic
+using System.Windows.Controls.Primitives;
+namespace UpdateMetadata
 {
     public static partial class MySQLDataAccess
     {
+    
         public static async Task<List<ReturnParameter>> QuerySQL<ReturnParameter, InputParameterToQuery>(string sql, InputParameterToQuery parameter, string connectionString)
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                var rows = await connection.QueryAsync<ReturnParameter>(sql, parameter, commandTimeout: 9999);
+                var rows = await connection.QueryAsync<ReturnParameter>(sql, parameter);
                 return rows.ToList();
             }
         }
@@ -21,7 +23,7 @@ namespace MetaDatabaseLibrary.DBLogic
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                var rows = await connection.QueryAsync<ReturnParameter>(sql, commandTimeout: 9999);
+                var rows = await connection.QueryAsync<ReturnParameter>(sql);
                 return rows.ToList();
             }
         }
