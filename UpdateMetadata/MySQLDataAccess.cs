@@ -39,7 +39,7 @@ namespace UpdateMetadata
         {
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-                // Debug.WriteLine(sql);
+                Debug.WriteLine(sql);
                 await connection.ExecuteAsync(sql);
             }
         }

@@ -23,13 +23,11 @@ namespace UpdateMetadata.WriteDatabase
             List<TableInstances.VideoID> databaseVideoIds, 
             List<TableInstances.VideoID> driveVideoIds)
         {
-
             foreach (var videoId in databaseVideoIds)
             {
                 await FindMatchingCsv(videoId);
             }
         }
-
         private static async Task FindMatchingCsv(TableInstances.VideoID videoId)
         {
             string csvFilePath = Path.ChangeExtension(videoId.PathToVideo, ".csv");
@@ -40,13 +38,13 @@ namespace UpdateMetadata.WriteDatabase
                 await ProcessCsvFile(csvFilePath, videoId);
             }
         }
-
         private static async Task ProcessCsvFile(string csvFilePath, TableInstances.VideoID videoId)
         {
             var metadataFields = await CsvToRawMetadata.ReadCSV(csvFilePath);
             
             if (await ShouldUpdateMetadata(csvFilePath, videoId, metadataFields))
             {
+                await RemoveOldRawMetadata(videoId);
                 await AddRawMetadataToDatabase(metadataFields, videoId);
             }
             else
@@ -99,6 +97,13 @@ namespace UpdateMetadata.WriteDatabase
                     row,
                     NameLibrary.General.connectionString);
             }
+        }
+        private static async Task RemoveOldRawMetadata(TableInstances.VideoID videoId)
+        {
+            await MySQLDataAccess.ExecuteSQL(
+                    SQL_QueriesStore.RawMetadata.deleteFrom,
+                    videoId,
+                    NameLibrary.General.connectionString);
         }
 
         private static void LogMissingCsvFile(string videoPath)

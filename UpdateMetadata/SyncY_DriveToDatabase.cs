@@ -8,6 +8,7 @@ using UpdateMetadata.ReadDatabase;
 using UpdateMetadata.Y_DriveReader;
 using UpdateMetadata.CompressKlvMetadata;
 using UpdateMetadata.WriteDatabase;
+using System.Configuration;
 
 namespace UpdateMetadata
 {

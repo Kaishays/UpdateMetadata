@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.WindowsAPICodePack.Shell;
+
+
 namespace UpdateMetadata.Y_DriveReader
 {
     public static class Y_DriveKlvExtractionCompletionTest
     {
         private static double highRatioOfCSV_ToTS_Size = .5;
-        private static double lowRatioOfCSV_ToTS_Size = .01;
+        private static double lowRatioOfCSV_ToTS_Size = .001;
         public static bool CheckAll(string csv, string ts)
         {
             return CheckIfCSV_Video_Threshold(csv, ts) && DoesCsvMatchVideoId(csv, ts);
@@ -22,6 +25,8 @@ namespace UpdateMetadata.Y_DriveReader
             long fileSize = fileInfo.Length;
             return fileSize;
         }
+
+
         public static string ConvertFilePathToCSV(string filePath)
         {
             return Path.ChangeExtension(filePath, ".csv");
