@@ -61,17 +61,20 @@ namespace UpdateMetadata.RawMetadata
             TableInstances.VideoID videoId, 
             List<string[]> metadataFields)
         {
-            if (await RawKlvInDbTest.TestIfRawMetadatraInDB(videoId, metadataFields))
+            if (await RawKlvInDbTest
+                .TestIfRawMetadatraInDB(videoId, metadataFields))
             {
                 return false;
             }
 
-            if (!Y_DriveKlvExtractionCompletionTest.CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
+            if (!Y_DriveKlvExtractionCompletionTest
+                .CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
             {
                 return false;
             }
 
-            if (!Y_DriveKlvExtractionCompletionTest.UtcTimeInEveryCsvRow(metadataFields))
+            if (!Y_DriveKlvExtractionCompletionTest
+                .UtcTimeInEveryCsvRow(metadataFields))
             {
                 return false;
             }

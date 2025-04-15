@@ -16,42 +16,25 @@
 
   <!-- Reference ImpleoTV .NET Assemblies -->
   <ItemGroup>
-	<Reference Include="StCoreWr, Version=1.0.8597.28865, Culture=neutral, processorArchitecture=AMD64">
-		<SpecificVersion>False</SpecificVersion>
-		<HintPath>ImpleoTV\StCoreWr.dll</HintPath>
-	</Reference>
-    <Reference Include="ImpleoLoggerWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>ImpleoTV\ImpleoLoggerWrapper.dll</HintPath>
-    </Reference>
-    <Reference Include="KlvPlayer">
-      <HintPath>$(ProjectDir)impleotv\KlvPlayer.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="KlvOverlayControl">
-      <HintPath>$(ProjectDir)impleotv\KlvOverlayControl.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="KlvLibWr">
-      <HintPath>$(ProjectDir)impleotv\KlvLibWr.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="KlvBaseTypes">
-      <HintPath>$(ProjectDir)impleotv\KlvBaseTypes.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Klv2JsonLib">
-      <HintPath>$(ProjectDir)impleotv\Klv2JsonLib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GeoJSON.Net">
-      <HintPath>$(ProjectDir)impleotv\GeoJSON.Net.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="StMonitorAgent">
-      <HintPath>$(ProjectDir)impleotv\StMonitorAgent.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+	  <Reference Include="ImpleoLoggerWrapper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>ImpleoTV\ImpleoLoggerWrapper.dll</HintPath>
+	  </Reference>
+	  <Reference Include="KlvPlayer, Version=3.10.0.0, Culture=neutral, processorArchitecture=AMD64">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>ImpleoTV\KlvPlayer.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+		  <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+	  </Reference>
+	  <Reference Include="StCoreWr, Version=1.0.8597.28865, Culture=neutral, processorArchitecture=AMD64">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>ImpleoTV\StCoreWr.dll</HintPath>
+	  </Reference>
+	  <Reference Include="StMonitorAgent, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>ImpleoTV\StMonitorAgent.dll</HintPath>
+	  </Reference>
     <Reference Include="NetMQ">
       <HintPath>$(ProjectDir)impleotv\NetMQ.dll</HintPath>
       <Private>False</Private>
