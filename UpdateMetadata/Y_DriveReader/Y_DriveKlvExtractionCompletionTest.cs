@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Shell;
-
+using Org.BouncyCastle.Crypto;
 
 namespace UpdateMetadata.Y_DriveReader
 {
     public static class Y_DriveKlvExtractionCompletionTest
     {
-        private static double highRatioOfCSV_ToTS_Size = .5;
-        private static double lowRatioOfCSV_ToTS_Size = .001;
         public static bool CheckAll(string csv, string ts)
         {
             return CheckIfCSV_Video_Threshold(csv, ts) && DoesCsvMatchVideoId(csv, ts);
@@ -34,13 +34,14 @@ namespace UpdateMetadata.Y_DriveReader
         public static bool CheckIfCSV_Video_Threshold(string csv, string ts)
         {
             double csvSize = GetFileSize(csv);
-            double tsSize = GetFileSize(ts);
-            double ratio = (double)csvSize / tsSize;
 
-            double hL = highRatioOfCSV_ToTS_Size;
-            double lL = lowRatioOfCSV_ToTS_Size;
+            double[] range = CsvFileSizeRangeBuild(ts);
+            if (range[0]== -1)
+                return false;
+            double lowLimit = range[0];
+            double highLimit = range[1];
 
-            if (ratio <= hL && ratio >= lL)
+            if (csvSize <= highLimit && csvSize >= lowLimit)
             {
                 return true;
             }
@@ -48,6 +49,54 @@ namespace UpdateMetadata.Y_DriveReader
             {
                 return false;
             }
+        }
+        private static double[] CsvFileSizeRangeBuild(string vidPath)
+        {
+            TimeSpan vidDur = GetVideoDurationFromFileMetadata(vidPath);
+            if (vidDur.TotalHours == 5000)
+            {
+                return new double[]
+                {
+                    -1
+                };
+            }
+            double seconds = vidDur.TotalSeconds;
+            int minKlvRowSize_Bytes = 36;
+            int maxKlvRowSize_Bytes = 412;
+            int highestFps = 60;
+            int lowestFps = 15;
+
+            double csvLowLimit =
+              minKlvRowSize_Bytes * lowestFps * seconds;
+            double csvHighLimit =
+                maxKlvRowSize_Bytes * highestFps * seconds;
+           
+
+
+            double[] results = new double[2];
+            results[0] = csvLowLimit;
+            results[1] = csvHighLimit;
+            return results;
+
+        }
+        private static TimeSpan GetVideoDurationFromFileMetadata(string filePath)
+        {
+            try
+            {
+                var shellFile = ShellFile.FromFilePath(filePath);
+                var durationValue = shellFile.Properties.System.Media.Duration.Value;
+                if (durationValue != null)
+                {
+                    long durationTicks = (long)durationValue;
+                    return TimeSpan.FromTicks(durationTicks);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return TimeSpan.FromHours(5000);
         }
         public static bool DoesCsvMatchVideoId(string csvFilePath, string videoId)
         {

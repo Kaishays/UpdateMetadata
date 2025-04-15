@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using UpdateMetadata.ReadDatabase;
 using UpdateMetadata.Y_DriveReader;
 
-namespace UpdateMetadata.WriteDatabase
+using Microsoft.WindowsAPICodePack.Shell;
+
+
+namespace UpdateMetadata.RawMetadata
 {
     public static class RawMetadataUpdater
     {
@@ -23,6 +25,7 @@ namespace UpdateMetadata.WriteDatabase
             List<TableInstances.VideoID> databaseVideoIds, 
             List<TableInstances.VideoID> driveVideoIds)
         {
+
             foreach (var videoId in databaseVideoIds)
             {
                 await FindMatchingCsv(videoId);

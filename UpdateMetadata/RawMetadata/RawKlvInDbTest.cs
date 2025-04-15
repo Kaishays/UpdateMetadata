@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace UpdateMetadata.ReadDatabase
+namespace UpdateMetadata.RawMetadata
 {
    public static class RawKlvInDbTest
     {

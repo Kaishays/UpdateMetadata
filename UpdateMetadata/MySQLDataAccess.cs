@@ -51,32 +51,5 @@ namespace UpdateMetadata
                 await connection.ExecuteAsync(sql, parameters);
             }
         }
-        public static async Task DeleteEntryFromDatabase<GenericParameter_1>(string sql, GenericParameter_1 parameters, string connectionString)
-        {
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                await connection.ExecuteAsync(sql, parameters);
-            }
-        }
-        public static void TestConnection(string connectionString)
-        {
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                if (connection != null)
-                {
-                    Debug.WriteLine("Connection successful to database");
-                }
-            }
-        }
-        public static async Task DeleteAllEntries_in_videoModel(string connectionString)
-        {
-            using (IDbConnection connection = new MySqlConnection(connectionString))
-            {
-                string sql = "DELETE FROM video_id;" +
-                             "\nALTER TABLE video_id AUTO_INCREMENT = 1;";
-                await connection.ExecuteAsync(sql);
-                Debug.WriteLine("Entries are Deleted");
-            }
-        }
     }
 }
