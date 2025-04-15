@@ -1,0 +1,11 @@
+<!--IMPLEOTV SYSTEMS LTD LICENSE MANAGER-->
+<!--Created 12/16/2022 8:34:57 AM-->
+<License>
+  <Product>KlvPlayer</Product>
+  <Mode>Production</Mode>
+  <User Name="David Humphrey" Company="Hood Technology" Email="davidh@hoodtech.com" Phone="" />
+  <Features>
+    <Feature Name="Application" Restriction="DoNotRun" Param="False" />
+    <Feature Name="Playback" Restriction="DoNotRun" Param="False" />
+  </Features>
+</License>

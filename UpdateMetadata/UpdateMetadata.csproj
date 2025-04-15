@@ -10,9 +10,87 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="impleotv\.vs\NodeInfo\v17\.suo" />
+    <None Include="impleotv\.vs\x264EncoderProcess\v17\.suo" />
+  </ItemGroup>
+
+  <!-- Reference ImpleoTV .NET Assemblies -->
+  <ItemGroup>
+	<Reference Include="StCoreWr, Version=1.0.8597.28865, Culture=neutral, processorArchitecture=AMD64">
+		<SpecificVersion>False</SpecificVersion>
+		<HintPath>ImpleoTV\StCoreWr.dll</HintPath>
+	</Reference>
+    <Reference Include="ImpleoLoggerWrapper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ImpleoTV\ImpleoLoggerWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="KlvPlayer">
+      <HintPath>$(ProjectDir)impleotv\KlvPlayer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="KlvOverlayControl">
+      <HintPath>$(ProjectDir)impleotv\KlvOverlayControl.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="KlvLibWr">
+      <HintPath>$(ProjectDir)impleotv\KlvLibWr.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="KlvBaseTypes">
+      <HintPath>$(ProjectDir)impleotv\KlvBaseTypes.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Klv2JsonLib">
+      <HintPath>$(ProjectDir)impleotv\Klv2JsonLib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GeoJSON.Net">
+      <HintPath>$(ProjectDir)impleotv\GeoJSON.Net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="StMonitorAgent">
+      <HintPath>$(ProjectDir)impleotv\StMonitorAgent.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NetMQ">
+      <HintPath>$(ProjectDir)impleotv\NetMQ.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CefSharp">
+      <HintPath>$(ProjectDir)impleotv\CefSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CefSharp.Wpf">
+      <HintPath>$(ProjectDir)impleotv\CefSharp.Wpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CefSharp.Core">
+      <HintPath>$(ProjectDir)impleotv\CefSharp.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Colorful.Console">
+      <HintPath>$(ProjectDir)impleotv\Colorful.Console.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="FluentCommandLineParser">
+      <HintPath>$(ProjectDir)impleotv\FluentCommandLineParser.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+
+  <!-- Add post-build event to copy DLLs directly to output directory -->
+  <Target Name="CopyImpleoTVDlls" AfterTargets="Build">
+    <ItemGroup>
+      <ImpleoTVFiles Include="$(ProjectDir)ImpleoTV\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ImpleoTVFiles)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>
