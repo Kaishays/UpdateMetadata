@@ -1,15 +1,15 @@
-﻿using CefSharp;
-using KlvPlayer;
-using System.Windows;
-using Microsoft.WindowsAPICodePack.Shell;
+﻿using KlvPlayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using UpdateMetadata.tests;
 
-namespace UpdateMetadata.Y_DriveReader
+
+
+namespace ValidateKlvExtraction.Tests
 {
     public static class VidDurationGetter
     {
@@ -23,11 +23,10 @@ namespace UpdateMetadata.Y_DriveReader
                     bool vidDurationCorrupt = false;
 
                     TimeSpan duration = TimeSpan.FromSeconds(m_KlvPlayer.GetDuration());
-                    m_KlvPlayer.Stop();
                     if (duration.TotalSeconds == 0)
                     {
                         vidDurationCorrupt = true;
-                        duration = GetVideoDurationFromFileMetadata(videoFilePath);
+                        duration = TimeSpan.FromHours(5000);
                     }
                     return (vidDurationCorrupt, duration);
                 }
@@ -44,8 +43,7 @@ namespace UpdateMetadata.Y_DriveReader
                     {
                         CreateVidPlayerForTests.Initialize();
                     });
-                    
-                    // Check if initialization succeeded
+
                     if (m_KlvPlayer == null)
                     {
                         MessageBox.Show("Failed to initialize video player.");
@@ -53,32 +51,13 @@ namespace UpdateMetadata.Y_DriveReader
                     }
                 }
                 bool init = m_KlvPlayer.Init(vidPath);
-                bool start = m_KlvPlayer.Start();
-                return init && start;
+                return init;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
             return false;
-        }
-        private static TimeSpan GetVideoDurationFromFileMetadata(string filePath)
-        {
-            try
-            {
-                var shellFile = ShellFile.FromFilePath(filePath);
-                var durationValue = shellFile.Properties.System.Media.Duration.Value;
-                if (durationValue != null)
-                {
-                    long durationTicks = (long)durationValue;
-                    return TimeSpan.FromTicks(durationTicks);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            return TimeSpan.FromHours(5000);
         }
     }
 }

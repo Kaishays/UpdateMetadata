@@ -727,7 +727,7 @@ namespace UpdateMetadata
                     FrameIndex = DEFAULT,
                     UniqueVideoID = 'VidID';
                 ";
-
+            public static string getRows = $"SELECT * FROM metadatabase.{NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.VideoID.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
         }
         public static class Datasets
         {

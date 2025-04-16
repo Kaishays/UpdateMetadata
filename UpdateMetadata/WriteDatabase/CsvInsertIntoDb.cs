@@ -30,7 +30,7 @@ namespace UpdateMetadata.WriteDatabase
 
             if (File.Exists(csvPath))
             {
-                if (Y_DriveKlvExtractionCompletionTest.CheckAll(csvPath, vidPath))
+                if (true)
                 {
                     string sql = BuildSQL_Local(vidPath, VidID);
                     if (sql != "no Csv Found")

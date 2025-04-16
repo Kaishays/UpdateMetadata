@@ -10,6 +10,7 @@ using UpdateMetadata.CompressKlvMetadata;
 using UpdateMetadata.WriteDatabase;
 using System.Configuration;
 using UpdateMetadata.RawMetadata;
+using System.Runtime.CompilerServices;
 
 namespace UpdateMetadata
 {
@@ -67,14 +68,12 @@ namespace UpdateMetadata
             }
             return true;
         }
-
         private static async Task LoadDrive_and_Database_into_Lists()
         {
             var loadDriveTask = Y_DriveLoader.GetVidPaths_and_Hash(NameLibrary.General.pathToDrive, new string[] { "*.ts", "*.mp4" });
-            var loadDatabaseTask = 
-                VidIDGetter.GetVid_Ids_FromDb();
+            var loadDatabaseTask = VidIDGetter.GetVid_Ids_FromDb();
 
-            await Task.WhenAll(loadDriveTask, loadDatabaseTask);
+            await Task.Run(() => (loadDriveTask, loadDatabaseTask));
 
             driveList_VideoID = await loadDriveTask;
             databaseList_VideoID = await loadDatabaseTask;

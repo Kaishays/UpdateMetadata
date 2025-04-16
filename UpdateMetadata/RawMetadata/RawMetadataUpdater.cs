@@ -4,10 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using UpdateMetadata.Y_DriveReader;
-
+using System.Globalization;
+using UpdateMetadata.tests;
+using ValidateKlvExtraction.Tests;
 using Microsoft.WindowsAPICodePack.Shell;
-
+using UpdateMetadata.Y_DriveReader;
 
 namespace UpdateMetadata.RawMetadata
 {
@@ -25,7 +26,6 @@ namespace UpdateMetadata.RawMetadata
             List<TableInstances.VideoID> databaseVideoIds, 
             List<TableInstances.VideoID> driveVideoIds)
         {
-
             foreach (var videoId in databaseVideoIds)
             {
                 await FindMatchingCsv(videoId);
@@ -43,43 +43,62 @@ namespace UpdateMetadata.RawMetadata
         }
         private static async Task ProcessCsvFile(string csvFilePath, TableInstances.VideoID videoId)
         {
-            var metadataFields = await CsvToRawMetadata.ReadCSV(csvFilePath);
+            var csvMetadataFields = await CsvToRawMetadata.ReadCSV(csvFilePath);
             
-            if (await ShouldUpdateMetadata(csvFilePath, videoId, metadataFields))
+            if (await 
+                ShouldUpdateMetadata(csvFilePath, videoId, csvMetadataFields))
             {
                 await RemoveOldRawMetadata(videoId);
-                await AddRawMetadataToDatabase(metadataFields, videoId);
+                await AddRawMetadataToDatabase(csvMetadataFields, videoId);
             }
             else
             {
                 LogMissingCsvFile(videoId.PathToVideo);
             }
         }
-
         private static async Task<bool> ShouldUpdateMetadata(
             string csvFilePath, 
             TableInstances.VideoID videoId, 
-            List<string[]> metadataFields)
+            List<string[]> csvMetadataFields)
         {
-            if (await RawKlvInDbTest
-                .TestIfRawMetadatraInDB(videoId, metadataFields))
+            if (VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo))
             {
                 return false;
             }
 
-            if (!Y_DriveKlvExtractionCompletionTest
-                .CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
+            if (!CsvExcists.IsCsvValid(csvFilePath))
             {
                 return false;
             }
 
-            if (!Y_DriveKlvExtractionCompletionTest
-                .UtcTimeInEveryCsvRow(metadataFields))
+            if (!DoesCsvMatchVideoId(csvFilePath, videoId.PathToVideo))
+            {
+                return false;
+            }
+
+            if (await RawKlvInDbTest.TestIfRawMetadatraInDB(videoId, csvMetadataFields))
+            {
+                return false;
+            }
+
+            if (!await UtcTimeTest.ValidateTimestamps(csvFilePath))
+            {
+                return false;
+            }
+
+            if (!CsvSizeToVidSizeRatio.CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
             {
                 return false;
             }
 
             return true;
+        }
+        private static bool DoesCsvMatchVideoId(string csvFilePath, string videoPath)
+        {
+            string csvFileName = Path.GetFileNameWithoutExtension(csvFilePath);
+            string videoFileName = Path.GetFileNameWithoutExtension(videoPath);
+            
+            return csvFileName.Equals(videoFileName, StringComparison.OrdinalIgnoreCase);
         }
 
         private static async Task AddRawMetadataToDatabase(
@@ -111,7 +130,6 @@ namespace UpdateMetadata.RawMetadata
                     videoId,
                     NameLibrary.General.connectionString);
         }
-
         private static void LogMissingCsvFile(string videoPath)
         {
             SyncY_DriveToDatabase.OnlyForDebug_PotentialCSVFileNotFound.Add(videoPath);
@@ -123,3 +141,4 @@ namespace UpdateMetadata.RawMetadata
         }
     }
 }
+

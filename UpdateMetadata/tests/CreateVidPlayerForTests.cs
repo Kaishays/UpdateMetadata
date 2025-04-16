@@ -4,9 +4,9 @@ using StCoreWr;
 using System.Diagnostics;
 using UpdateMetadata.Y_DriveReader;
 
-namespace KlvExtractor.VideoPlayer
+namespace UpdateMetadata.tests
 {
-    public static class CreateVidPlayer
+    public static class CreateVidPlayerForTests
     {
         public static void Initialize()
         {
@@ -17,10 +17,11 @@ namespace KlvExtractor.VideoPlayer
                     CKlvPlayer cKlvPlayer = new CKlvPlayer();
 
                     cKlvPlayer = ActivateLicense(cKlvPlayer);
+
                     SetVidPlayer(cKlvPlayer);
                 });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

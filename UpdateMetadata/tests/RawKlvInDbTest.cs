@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace UpdateMetadata.RawMetadata
+namespace UpdateMetadata.tests
 {
    public static class RawKlvInDbTest
     {
@@ -27,12 +27,6 @@ namespace UpdateMetadata.RawMetadata
                      vidID_Instance,
                      NameLibrary.General.connectionString);
             return rowCt[0];
-        }
-
-        // Helper class to properly map the COUNT(*) result
-        private class RowCountResult
-        {
-            public int Count { get; set; }
         }
     }
 }
