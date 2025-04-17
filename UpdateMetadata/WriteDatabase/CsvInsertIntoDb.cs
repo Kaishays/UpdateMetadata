@@ -56,15 +56,15 @@ namespace UpdateMetadata.WriteDatabase
         {
             return path.Replace("\\", "/");
         }
-        public static string BuildSQL_Local(string filepath, ulong VidID)
+        public static string BuildSQL_Local(string tsFilePath, ulong VidID)
         {
             // Ensure the file path uses forward slashes for MySQL compatibility
-            filepath = ConvertTsToCsvPath(filepath);
-            if (!File.Exists(filepath))
+            tsFilePath = ConvertTsToCsvPath(tsFilePath);
+            if (!File.Exists(tsFilePath))
                 return "no Csv Found";
             // Construct the SQL query dynamically
             string sqlQuery = $@"
-                LOAD DATA LOCAL INFILE '{filepath}'
+                LOAD DATA LOCAL INFILE '{tsFilePath}'
                 INTO TABLE raw_metadata
                 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '""'
                 LINES TERMINATED BY '\n'

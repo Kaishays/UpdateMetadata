@@ -9,6 +9,7 @@ using UpdateMetadata.tests;
 using ValidateKlvExtraction.Tests;
 using Microsoft.WindowsAPICodePack.Shell;
 using UpdateMetadata.Y_DriveReader;
+using UpdateMetadata.WriteDatabase;
 
 namespace UpdateMetadata.RawMetadata
 {
@@ -48,8 +49,8 @@ namespace UpdateMetadata.RawMetadata
             if (await 
                 ShouldUpdateMetadata(csvFilePath, videoId, csvMetadataFields))
             {
-                await RemoveOldRawMetadata(videoId);
-                await AddRawMetadataToDatabase(csvMetadataFields, videoId);
+                await DeleteFromDb.RemoveOldRawMetadata(videoId);
+                await CsvInsertIntoDb.CsvToDB(videoId);
             }
             else
             {
@@ -82,14 +83,14 @@ namespace UpdateMetadata.RawMetadata
                 return false;
             }
 
-            if (!await UtcTimeTest
-                .ValidateUtcTimestamps(csvFilePath))
+            if (!await CsvSizeToVidSizeRatio
+                .CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
             {
                 return false;
             }
 
-            if (!await CsvSizeToVidSizeRatio
-                .CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
+            if (!await UtcTimeTest
+                .ValidateUtcTimestamps(csvFilePath))
             {
                 return false;
             }
@@ -103,40 +104,10 @@ namespace UpdateMetadata.RawMetadata
             
             return csvFileName.Equals(videoFileName, StringComparison.OrdinalIgnoreCase);
         }
-
-        private static async Task AddRawMetadataToDatabase(
-            List<string[]> metadataFields, 
-            TableInstances.VideoID videoId)
-        {
-            List<TableInstances.RawMetadata> rawMetadataRows 
-                = CsvToRawMetadata.ConvertCsvToRawMetadata(metadataFields, videoId);
-            int frameCount = 0;
-
-            foreach (TableInstances.RawMetadata row in rawMetadataRows)
-            {
-                frameCount++;
-                LogProcessingProgress(
-                    frameCount, 
-                    processedFileCount, 
-                    videoId.PathToVideo);
-
-                await MySQLDataAccess.ExecuteSQL(
-                    SQL_QueriesStore.RawMetadata.addTo,
-                    row,
-                    NameLibrary.General.connectionString);
-            }
-        }
-        private static async Task RemoveOldRawMetadata(TableInstances.VideoID videoId)
-        {
-            await MySQLDataAccess.ExecuteSQL(
-                    SQL_QueriesStore.RawMetadata.deleteFrom,
-                    videoId,
-                    NameLibrary.General.connectionString);
-        }
         private static void LogMissingCsvFile(string videoPath)
         {
-            SyncY_DriveToDatabase.OnlyForDebug_PotentialCSVFileNotFound.Add(videoPath);
-            Debug.WriteLine($"CSV FILE NOT FOUND: {videoPath}");
+            CsvWriter.ManageCSV_Append("", videoPath);
+            Debug.WriteLine($"CSV FILE ERROR: {videoPath}");
         }
         private static void LogProcessingProgress(int frameCount, int fileCount, string videoPath)
         {

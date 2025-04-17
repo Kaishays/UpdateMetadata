@@ -17,9 +17,7 @@ namespace UpdateMetadata
     public static class SyncY_DriveToDatabase
     {
         public static List<TableInstances.VideoID> driveList_VideoID = null;
-        public static List<TableInstances.VideoID> databaseList_VideoID = null;
-        public static List<string> OnlyForDebug_PotentialCSVFileNotFound = new List<string>();
-        
+        public static List<TableInstances.VideoID> databaseList_VideoID = null;        
         public static async Task SyncDriveToDB()
         {
             try

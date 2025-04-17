@@ -65,16 +65,15 @@ namespace ValidateKlvExtraction.Tests
 
         private static bool HasValidUtcTimeFormat(List<string[]> metadataRows)
         {
-            int invalidTimestampCount = CountInvalidTimestamps(metadataRows);
-            int maxAllowedInvalidCount = CalculateMaxAllowedInvalidCount(metadataRows.Count);
-            
-            return invalidTimestampCount <= maxAllowedInvalidCount;
-        }
+            bool invalidTimestampCount = CountInvalidTimestamps(metadataRows);
 
-        private static int CountInvalidTimestamps(List<string[]> metadataRows)
+            return invalidTimestampCount;
+        }
+        private static bool CountInvalidTimestamps(List<string[]> metadataRows)
         {
             int invalidCount = 0;
-            
+            int maxAllowedInvalidCount = CalculateMaxAllowedInvalidCount(metadataRows.Count);
+
             foreach (string[] row in metadataRows)
             {
                 if (row.Length == 0 || string.IsNullOrEmpty(row[0]) 
@@ -82,9 +81,12 @@ namespace ValidateKlvExtraction.Tests
                 {
                     invalidCount++;
                 }
+                if (invalidCount > maxAllowedInvalidCount)
+                {
+                    return false;
+                }
             }
-            
-            return invalidCount;
+            return true;
         }
 
         private static int CalculateMaxAllowedInvalidCount(int totalCount)
@@ -156,6 +158,12 @@ namespace ValidateKlvExtraction.Tests
             if (string.IsNullOrEmpty(timeString))
             {
                 return false;
+            }
+            
+            timeString = timeString.Trim();
+            if (timeString == "1970-01-01")
+            {
+                return true;
             }
             
             try

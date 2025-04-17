@@ -63,5 +63,12 @@ namespace UpdateMetadata.WriteDatabase
                 databaseVideoIds.Remove(videoId);
             }
         }
+        public static async Task RemoveOldRawMetadata(TableInstances.VideoID videoId)
+        {
+            await MySQLDataAccess.ExecuteSQL(
+                    SQL_QueriesStore.RawMetadata.deleteFrom,
+                    videoId,
+                    NameLibrary.General.connectionString);
+        }
     }
 }
