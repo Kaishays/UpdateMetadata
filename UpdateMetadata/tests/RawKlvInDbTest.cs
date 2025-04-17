@@ -9,7 +9,8 @@ namespace UpdateMetadata.tests
 {
    public static class RawKlvInDbTest
     {
-        public static async Task<bool> TestIfRawMetadatraInDB(TableInstances.VideoID vidID_Instance, List<string[]> allFieldsInCSV)
+        public static async Task<bool> TestIfRawMetadatraInDB(
+            TableInstances.VideoID vidID_Instance, List<string[]> allFieldsInCSV)
         {
             int rowCt = await GetRowCount(vidID_Instance);
             int csvCt = allFieldsInCSV.Count();
@@ -19,7 +20,8 @@ namespace UpdateMetadata.tests
             else
                 return false;
         }
-        public static async Task<int> GetRowCount(TableInstances.VideoID vidID_Instance)
+        public static async Task<int> GetRowCount(
+            TableInstances.VideoID vidID_Instance)
         {
             List<int> rowCt = await
                  MySQLDataAccess.QuerySQL<int, TableInstances.VideoID>(

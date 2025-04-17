@@ -44,41 +44,53 @@ namespace UpdateMetadata.RawMetadata
         }
         private static async Task ProcessCsvFile(string csvFilePath, TableInstances.VideoID videoId)
         {
-            var csvMetadataFields = await CsvToRawMetadata.ReadCSV(csvFilePath);
-            
-            if (await 
-                ShouldUpdateMetadata(csvFilePath, videoId, csvMetadataFields))
+            var csvMetadataFields = await 
+                CsvToRawMetadata.ReadCSV(csvFilePath);
+
+            bool updateDb = await ShouldUpdateDatabaseKlv(
+               videoId, csvMetadataFields);
+
+            if (updateDb)
             {
-                await DeleteFromDb.RemoveOldRawMetadata(videoId);
-                await CsvInsertIntoDb.CsvToDB(videoId);
+                await UpdateDatabaseRawMetadata(videoId);
             }
-            else
+
+            if (await ShouldReextractKlvData(
+                csvFilePath, videoId))
             {
+                if(!updateDb)
+                    await UpdateDatabaseRawMetadata(videoId);
+
                 LogMissingCsvFile(videoId.PathToVideo);
             }
         }
-        private static async Task<bool> ShouldUpdateMetadata(
-            string csvFilePath, 
-            TableInstances.VideoID videoId, 
-            List<string[]> csvMetadataFields)
+        private static async Task UpdateDatabaseRawMetadata(TableInstances.VideoID videoId) {
+            await DeleteFromDb.RemoveOldRawMetadata(videoId);
+            await CsvInsertIntoDb.CsvToDB(videoId);
+        }
+        private static async Task<bool> ShouldUpdateDatabaseKlv(
+           TableInstances.VideoID videoId,
+           List<string[]> csvMetadataFields)
         {
-            if (VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo))
-            {
-                return false;
-            }
-
-            if (!CsvExcists.IsCsvValid(csvFilePath))
-            {
-                return false;
-            }
-
-            if (!DoesCsvMatchVideoId(csvFilePath, videoId.PathToVideo))
+            if (VideoCorupted
+                .CheckFile_Corrupted(videoId.PathToVideo))
             {
                 return false;
             }
 
             if (await RawKlvInDbTest
                 .TestIfRawMetadatraInDB(videoId, csvMetadataFields))
+            {
+                return false;
+            }
+
+            return true;
+        }
+        private static async Task<bool> ShouldReextractKlvData(
+            string csvFilePath, 
+            TableInstances.VideoID videoId)
+        {
+            if (!CsvExcists.IsCsvValid(csvFilePath))
             {
                 return false;
             }
@@ -96,13 +108,6 @@ namespace UpdateMetadata.RawMetadata
             }
 
             return true;
-        }
-        private static bool DoesCsvMatchVideoId(string csvFilePath, string videoPath)
-        {
-            string csvFileName = Path.GetFileNameWithoutExtension(csvFilePath);
-            string videoFileName = Path.GetFileNameWithoutExtension(videoPath);
-            
-            return csvFileName.Equals(videoFileName, StringComparison.OrdinalIgnoreCase);
         }
         private static void LogMissingCsvFile(string videoPath)
         {
