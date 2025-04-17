@@ -8,42 +8,55 @@ namespace UpdateMetadata.tests
 {
     public static class CreateVidPlayerForTests
     {
-        public static void Initialize()
+        private const string LicensePath = @"StanagPlayerUnlocked-12-22.lic";
+        private const string LicenseKey = "A13EC1C1-3615E88F-2ABC85C7-E82242D5";
+        private const string LicenseProductName = "KlvPlayer";
+
+        public static CKlvPlayer CreateAndActivatePlayer()
         {
             try
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                return Application.Current.Dispatcher.Invoke(() =>
                 {
-                    CKlvPlayer cKlvPlayer = new CKlvPlayer();
+                    CKlvPlayer player = new CKlvPlayer();
 
-                    cKlvPlayer = ActivateLicense(cKlvPlayer);
-
-                    SetVidPlayer(cKlvPlayer);
+                    if (!TryActivateLicense(player))
+                    {
+                        MessageBox.Show("Error Activating ImpleoTv License. Player will not function correctly.", "License Activation Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return player; 
+                    }
+                    return player;
                 });
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Trace.WriteLine($"Exception during player creation/activation: {ex.Message}");
+                MessageBox.Show($"Failed to initialize video player: {ex.Message}", "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
             }
         }
-        private static CKlvPlayer ActivateLicense(CKlvPlayer cKlvPlayer)
-        {
-            string licensePath = @"StanagPlayerUnlocked-12-22.lic";
-            string licenseKey = "A13EC1C1-3615E88F-2ABC85C7-E82242D5";
 
-            if (!string.IsNullOrEmpty(licensePath) && !string.IsNullOrEmpty(licenseKey))
-            {
-                Trace.WriteLine("Activating the player");
-                if (cKlvPlayer.Activate("KlvPlayer", licensePath, licenseKey) == false)
-                {
-                    MessageBox.Show("Error Activating ImpleoTv License");
-                }
-            }
-            return cKlvPlayer;
-        }
-        private static void SetVidPlayer(CKlvPlayer cKlvPlayer)
+        private static bool TryActivateLicense(CKlvPlayer player)
         {
-            VidDurationGetter.m_KlvPlayer = cKlvPlayer;
+            if (string.IsNullOrEmpty(LicensePath) 
+                || string.IsNullOrEmpty(LicenseKey))
+            {
+                Trace.WriteLine("License path or key is missing. Activation skipped.");
+                return false;
+            }
+
+            Trace.WriteLine($"Activating the player with product '{LicenseProductName}' and license file '{LicensePath}'");
+            bool success = player.Activate(LicenseProductName, LicensePath, LicenseKey);
+
+            if (!success)
+            {
+                Trace.WriteLine("Activation failed.");
+            }
+            else
+            {
+                Trace.WriteLine("Activation successful.");
+            }
+            return success;
         }
     }
 }

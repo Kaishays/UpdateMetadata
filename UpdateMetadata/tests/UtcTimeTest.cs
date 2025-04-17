@@ -3,95 +3,50 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ValidateKlvExtraction.Tests
 {
     public static class UtcTimeTest
     {
         private const string UtcTimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFFFFZ";
+        private const double MaxPercentOutOfThreshold = 1.0;
+        private const int MaxTimeDifferenceMilliseconds = 70;
+        
         private static DateTime previousTimestamp = DateTime.MinValue;
-        private static int percentFramesAllowedOutsideOfUtcTimeThreshold = 10;
-        private static TimeSpan differenceBetweenUtcRowsThreshold = TimeSpan.FromMilliseconds(70);
-        public static async Task<bool> ValidateTimestamps(string tsFilePath)
+        private static readonly TimeSpan MaxTimeDifference = TimeSpan.FromMilliseconds(MaxTimeDifferenceMilliseconds);
+
+        public static async Task<bool> ValidateUtcTimestamps(string tsFilePath)
         {
-            string csvFilePath = CsvExcists.ConvertToCsvPath(tsFilePath);
-            List<string[]> metadataRows = await ReadCsvFile(csvFilePath);
+            string csvFilePath = ConvertToCsvPath(tsFilePath);
+            List<string[]> metadataRows = await ReadCsvFileWithoutHeader(csvFilePath);
             
-            if (!ContainsValidUtcTimeInAllRows(metadataRows))
+            if (metadataRows.Count == 0)
+            {
                 return false;
+            }
                 
-            return AreTimestampsWithinThreshold(metadataRows);
+            return HasValidUtcTimeFormat(metadataRows) && 
+                   HasConsistentTimestampSequence(metadataRows);
         }
-        private static bool ContainsValidUtcTimeInAllRows(List<string[]> metadataRows)
-        {
-            if (metadataRows == null || metadataRows.Count == 0)
-                return false;
 
-            foreach (string[] row in metadataRows)
-            {
-                if (row == null || row.Length == 0 || string.IsNullOrEmpty(row[0]))
-                    return false;
+        private static string ConvertToCsvPath(string tsFilePath)
+        {
+            return tsFilePath.Replace(".ts", ".csv");
+        }
 
-                if (!IsValidUtcTimeFormat(row[0]))
-                    return false;
-            }
-            return true;
-        }
-        private static bool AreTimestampsWithinThreshold(List<string[]> metadataRows)
+        private static async Task<List<string[]>> ReadCsvFileWithoutHeader(string csvFilePath)
         {
-            ResetPreviousTimestamp();
-            int framesOutsideOfTimestampThreshold = 0;
-            int totalFrames = metadataRows.Count;
-            int allowedBadFrames = totalFrames * 
-                percentFramesAllowedOutsideOfUtcTimeThreshold / 100;
-            foreach (string[] row in metadataRows)
-            {
-                DateTime timestamp = ParseUtcTimestamp(row[0]);
-
-                if (!IsCurrentTimestampWithinThreshold(timestamp))
-                    framesOutsideOfTimestampThreshold++;
-            }
-            return framesOutsideOfTimestampThreshold > allowedBadFrames;
-        }
-        private static void ResetPreviousTimestamp()
-        {
-            previousTimestamp = DateTime.MinValue;
-        }
-        private static DateTime ParseUtcTimestamp(string timestampString)
-        {
-            return DateTime.ParseExact(
-                timestampString.Trim(),
-                UtcTimeFormat,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeUniversal);
-        }
-        private static bool IsCurrentTimestampWithinThreshold(DateTime current)
-        {
-            if (previousTimestamp == DateTime.MinValue)
-            {
-                previousTimestamp = current;
-                return true;
-            }
-
-            TimeSpan difference = current - previousTimestamp;
-            previousTimestamp = current;
+            List<string[]> rows = await ReadAllCsvRows(csvFilePath);
             
-            return difference < differenceBetweenUtcRowsThreshold;
-        }
-        private static bool IsValidUtcTimeFormat(string timeString)
-        {
-            try
+            if (rows.Count > 0)
             {
-                ParseUtcTimestamp(timeString);
-                return true;
+                rows.RemoveAt(0);
             }
-            catch
-            {
-                return false;
-            }
+            
+            return rows;
         }
-        public static async Task<List<string[]>> ReadCsvFile(string csvFilePath)
+        
+        private static async Task<List<string[]>> ReadAllCsvRows(string csvFilePath)
         {
             List<string[]> rows = new List<string[]>();
             
@@ -105,13 +60,113 @@ namespace ValidateKlvExtraction.Tests
                 }
             }
             
-            RemoveHeaderRow(rows);
             return rows;
         }
-        private static void RemoveHeaderRow(List<string[]> rows)
+
+        private static bool HasValidUtcTimeFormat(List<string[]> metadataRows)
         {
-            if (rows.Count > 0)
-                rows.RemoveAt(0);
+            int invalidTimestampCount = CountInvalidTimestamps(metadataRows);
+            int maxAllowedInvalidCount = CalculateMaxAllowedInvalidCount(metadataRows.Count);
+            
+            return invalidTimestampCount <= maxAllowedInvalidCount;
+        }
+
+        private static int CountInvalidTimestamps(List<string[]> metadataRows)
+        {
+            int invalidCount = 0;
+            
+            foreach (string[] row in metadataRows)
+            {
+                if (row.Length == 0 || string.IsNullOrEmpty(row[0]) 
+                    || !IsValidUtcTimeFormat(row[0]))
+                {
+                    invalidCount++;
+                }
+            }
+            
+            return invalidCount;
+        }
+
+        private static int CalculateMaxAllowedInvalidCount(int totalCount)
+        {
+            return (int)(totalCount * (MaxPercentOutOfThreshold / 100.0));
+        }
+
+        private static bool HasConsistentTimestampSequence(List<string[]> metadataRows)
+        {
+            ResetPreviousTimestamp();
+            
+            int outOfSequenceCount = CountOutOfSequenceTimestamps(metadataRows);
+            int maxAllowedOutOfSequence = CalculateMaxAllowedInvalidCount(metadataRows.Count);
+            
+            return outOfSequenceCount <= maxAllowedOutOfSequence;
+        }
+
+        private static int CountOutOfSequenceTimestamps(List<string[]> metadataRows)
+        {
+            int outOfSequenceCount = 0;
+            
+            foreach (string[] row in metadataRows)
+            {
+                if (row.Length > 0 && !string.IsNullOrEmpty(row[0]) 
+                    && IsValidUtcTimeFormat(row[0]))
+                {
+                    DateTime currentTimestamp = ParseUtcTimestamp(row[0]);
+                    
+                    if (!IsWithinTimeThreshold(currentTimestamp))
+                    {
+                        outOfSequenceCount++;
+                    }
+                }
+            }
+            
+            return outOfSequenceCount;
+        }
+
+        private static bool IsWithinTimeThreshold(DateTime currentTimestamp)
+        {
+            if (previousTimestamp == DateTime.MinValue)
+            {
+                previousTimestamp = currentTimestamp;
+                return true;
+            }
+
+            TimeSpan difference = currentTimestamp - previousTimestamp;
+            previousTimestamp = currentTimestamp;
+            
+            return difference <= MaxTimeDifference;
+        }
+
+        private static void ResetPreviousTimestamp()
+        {
+            previousTimestamp = DateTime.MinValue;
+        }
+
+        private static DateTime ParseUtcTimestamp(string timestampString)
+        {
+            return DateTime.ParseExact(
+                timestampString.Trim(),
+                UtcTimeFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal);
+        }
+
+        private static bool IsValidUtcTimeFormat(string timeString)
+        {
+            if (string.IsNullOrEmpty(timeString))
+            {
+                return false;
+            }
+            
+            try
+            {
+                ParseUtcTimestamp(timeString);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

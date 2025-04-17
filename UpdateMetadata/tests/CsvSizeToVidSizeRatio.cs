@@ -9,10 +9,10 @@ namespace ValidateKlvExtraction.Tests
 {
     public static class CsvSizeToVidSizeRatio
     {
-        public static bool CheckIfCSV_Video_Threshold(string csv, string ts)
+        public static async Task<bool> CheckIfCSV_Video_Threshold(string csv, string ts)
         {
             double csvSize = GetFileSize(csv);
-            double[] range = CsvFileSizeRangeBuild(ts);
+            double[] range = await CsvFileSizeRangeBuild(ts);
             if (range[0] == -1)
                 return false;
 
@@ -29,11 +29,12 @@ namespace ValidateKlvExtraction.Tests
                 return false;
             }
         }
-        private static double[] CsvFileSizeRangeBuild(string vidPath)
+        private static async Task<double[]> CsvFileSizeRangeBuild(string vidPath)
         {
             TimeSpan vidDur;
             bool videoCorupted = false;
-            (videoCorupted, vidDur) = VidDurationGetter.GetVideoDuration(vidPath);
+            (videoCorupted, vidDur) = 
+                await VideoDurationExtractor.ExtractDuration(vidPath);
 
             if (videoCorupted || vidDur.TotalHours == 5000)
             {
@@ -61,7 +62,7 @@ namespace ValidateKlvExtraction.Tests
         }
         private static long GetFileSize(string filePath)
         {
-             if (VideoCorupted.CheckFile_Corrupted(filePath))
+             if (!VideoCorupted.CheckFile_Corrupted(filePath))
                 return new FileInfo(filePath).Length;
             else
             {

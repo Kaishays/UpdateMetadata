@@ -42,7 +42,7 @@ namespace UpdateMetadata.Y_DriveReader
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        CreateVidPlayerForTests.Initialize();
+                        CreateVidPlayerForTests.CreateAndActivatePlayer();
                     });
                     
                     // Check if initialization succeeded

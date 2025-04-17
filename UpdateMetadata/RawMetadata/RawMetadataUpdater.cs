@@ -76,17 +76,20 @@ namespace UpdateMetadata.RawMetadata
                 return false;
             }
 
-            if (await RawKlvInDbTest.TestIfRawMetadatraInDB(videoId, csvMetadataFields))
+            if (await RawKlvInDbTest
+                .TestIfRawMetadatraInDB(videoId, csvMetadataFields))
             {
                 return false;
             }
 
-            if (!await UtcTimeTest.ValidateTimestamps(csvFilePath))
+            if (!await UtcTimeTest
+                .ValidateUtcTimestamps(csvFilePath))
             {
                 return false;
             }
 
-            if (!CsvSizeToVidSizeRatio.CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
+            if (!await CsvSizeToVidSizeRatio
+                .CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
             {
                 return false;
             }
