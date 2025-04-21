@@ -15,8 +15,6 @@ namespace UpdateMetadata.RawMetadata
 {
     public static class RawMetadataUpdater
     {
-        private static int processedFileCount = 0;
-
         public static async Task UpdateRawMetadata()
         {
             await UpdateRawMetadata(
@@ -29,94 +27,39 @@ namespace UpdateMetadata.RawMetadata
         {
             foreach (var videoId in databaseVideoIds)
             {
-                await FindMatchingCsv(videoId);
+                await TryUpdateRawMetadata(videoId);
             }
         }
-        private static async Task FindMatchingCsv(TableInstances.VideoID videoId)
+        private static async Task TryUpdateRawMetadata(TableInstances.VideoID videoId)
         {
-            string csvFilePath = Path.ChangeExtension(videoId.PathToVideo, ".csv");
-            
-            if (File.Exists(csvFilePath))
+            if(!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo))
             {
-                processedFileCount++;
-                await ProcessCsvFile(csvFilePath, videoId);
-            }
-        }
-        private static async Task ProcessCsvFile(string csvFilePath, TableInstances.VideoID videoId)
-        {
-            var csvMetadataFields = await 
-                CsvToRawMetadata.ReadCSV(csvFilePath);
+                (bool csvFound, string csvPath) = FindMatchingCsv_.FindMatchingCsv(videoId);
 
-            bool updateDb = await ShouldUpdateDatabaseKlv(
-               videoId, csvMetadataFields);
+                if (csvFound)
+                {
+                    var csvMetadataFields = await
+                        CsvToRawMetadata.ReadCSV(csvPath);
 
-            if (updateDb)
-            {
-                await UpdateDatabaseRawMetadata(videoId);
-            }
+                    TestResultsMetadata testResults =
+                        await TestManagerMetadata.ValidateMetadata(
+                        csvPath, videoId, csvMetadataFields);
 
-            if (await ShouldReextractKlvData(
-                csvFilePath, videoId))
-            {
-                if(!updateDb)
-                    await UpdateDatabaseRawMetadata(videoId);
+                    if (testResults.ShouldUpdate)
+                        await UpdateDatabaseRawMetadata(videoId);
 
-                LogMissingCsvFile(videoId.PathToVideo);
+                    if (testResults.ShouldReextract)
+                        LogReextractKlv.LogMissingCsvFile(videoId.PathToVideo);
+                }
+                else
+                {
+                    LogReextractKlv.LogMissingCsvFile(videoId.PathToVideo);
+                }
             }
         }
         private static async Task UpdateDatabaseRawMetadata(TableInstances.VideoID videoId) {
             await DeleteFromDb.RemoveOldRawMetadata(videoId);
             await CsvInsertIntoDb.CsvToDB(videoId);
-        }
-        private static async Task<bool> ShouldUpdateDatabaseKlv(
-           TableInstances.VideoID videoId,
-           List<string[]> csvMetadataFields)
-        {
-            if (VideoCorupted
-                .CheckFile_Corrupted(videoId.PathToVideo))
-            {
-                return false;
-            }
-
-            if (await RawKlvInDbTest
-                .TestIfRawMetadatraInDB(videoId, csvMetadataFields))
-            {
-                return false;
-            }
-
-            return true;
-        }
-        private static async Task<bool> ShouldReextractKlvData(
-            string csvFilePath, 
-            TableInstances.VideoID videoId)
-        {
-            if (!CsvExcists.IsCsvValid(csvFilePath))
-            {
-                return false;
-            }
-
-            if (!await CsvSizeToVidSizeRatio
-                .CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo))
-            {
-                return false;
-            }
-
-            if (!await UtcTimeTest
-                .ValidateUtcTimestamps(csvFilePath))
-            {
-                return false;
-            }
-
-            return true;
-        }
-        private static void LogMissingCsvFile(string videoPath)
-        {
-            CsvWriter.ManageCSV_Append("", videoPath);
-            Debug.WriteLine($"CSV FILE ERROR: {videoPath}");
-        }
-        private static void LogProcessingProgress(int frameCount, int fileCount, string videoPath)
-        {
-            Debug.WriteLine($"Processing frame {frameCount} of file {fileCount}: {videoPath}");
         }
     }
 }

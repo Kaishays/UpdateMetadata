@@ -9,7 +9,7 @@ namespace UpdateMetadata.tests
 {
    public static class RawKlvInDbTest
     {
-        public static async Task<bool> TestIfRawMetadatraInDB(
+        public static async Task<bool> TestIfRawMetadataInDB(
             TableInstances.VideoID vidID_Instance, List<string[]> allFieldsInCSV)
         {
             int rowCt = await GetRowCount(vidID_Instance);
