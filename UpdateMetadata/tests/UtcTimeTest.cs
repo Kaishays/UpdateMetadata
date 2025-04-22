@@ -11,7 +11,7 @@ namespace ValidateKlvExtraction.Tests
         private const string UtcTimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFFFFZ";
         private const double MaxPercentOutOfThreshold = 1.0;
         private const int MaxTimeDifferenceMilliseconds = 70;
-        
+        private static DateTime ErrorDateTimeConst = DateTime.MaxValue;
         private static DateTime previousTimestamp = DateTime.MinValue;
         private static readonly TimeSpan MaxTimeDifference = TimeSpan.FromMilliseconds(MaxTimeDifferenceMilliseconds);
 
@@ -24,8 +24,8 @@ namespace ValidateKlvExtraction.Tests
             {
                 return false;
             }
-                
-            return HasValidUtcTimeFormat(metadataRows) && 
+
+            return CountInvalidTimestamps(metadataRows) && 
                    HasConsistentTimestampSequence(metadataRows);
         }
 
@@ -33,7 +33,6 @@ namespace ValidateKlvExtraction.Tests
         {
             return tsFilePath.Replace(".ts", ".csv");
         }
-
         private static async Task<List<string[]>> ReadCsvFileWithoutHeader(string csvFilePath)
         {
             List<string[]> rows = await ReadAllCsvRows(csvFilePath);
@@ -45,7 +44,6 @@ namespace ValidateKlvExtraction.Tests
             
             return rows;
         }
-        
         private static async Task<List<string[]>> ReadAllCsvRows(string csvFilePath)
         {
             List<string[]> rows = new List<string[]>();
@@ -62,17 +60,11 @@ namespace ValidateKlvExtraction.Tests
             
             return rows;
         }
-
-        private static bool HasValidUtcTimeFormat(List<string[]> metadataRows)
-        {
-            bool invalidTimestampCount = CountInvalidTimestamps(metadataRows);
-
-            return invalidTimestampCount;
-        }
         private static bool CountInvalidTimestamps(List<string[]> metadataRows)
         {
             int invalidCount = 0;
-            int maxAllowedInvalidCount = CalculateMaxAllowedInvalidCount(metadataRows.Count);
+            int maxAllowedInvalidCount 
+                = CalculateMaxAllowedInvalidCount(metadataRows.Count);
 
             foreach (string[] row in metadataRows)
             {
@@ -92,6 +84,33 @@ namespace ValidateKlvExtraction.Tests
         private static int CalculateMaxAllowedInvalidCount(int totalCount)
         {
             return (int)(totalCount * (MaxPercentOutOfThreshold / 100.0));
+        }
+        private static bool IsValidUtcTimeFormat(string timeString)
+        {
+            if (string.IsNullOrEmpty(timeString))
+            {
+                return false;
+            }
+
+            timeString = timeString.Trim();
+            if (timeString == "1970-01-01")
+            {
+                return true;
+            }
+
+            try
+            {
+                DateTime.ParseExact(
+                timeString,
+                UtcTimeFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static bool HasConsistentTimestampSequence(List<string[]> metadataRows)
@@ -120,8 +139,10 @@ namespace ValidateKlvExtraction.Tests
                         outOfSequenceCount++;
                     }
                 }
+                previousTimestamp = ErrorDateTimeConst;
+                outOfSequenceCount++;
             }
-            
+
             return outOfSequenceCount;
         }
 
@@ -131,12 +152,17 @@ namespace ValidateKlvExtraction.Tests
             {
                 previousTimestamp = currentTimestamp;
                 return true;
+            } else if (previousTimestamp == DateTime.MinValue)
+            {
+                previousTimestamp = currentTimestamp;
+                return false;
             }
 
             TimeSpan difference = currentTimestamp - previousTimestamp;
-            previousTimestamp = currentTimestamp;
+            TimeSpan absoluteDifference = difference.Duration();
             
-            return difference <= MaxTimeDifference;
+            previousTimestamp = currentTimestamp;
+            return absoluteDifference <= MaxTimeDifference;
         }
 
         private static void ResetPreviousTimestamp()
@@ -146,35 +172,30 @@ namespace ValidateKlvExtraction.Tests
 
         private static DateTime ParseUtcTimestamp(string timestampString)
         {
-            return DateTime.ParseExact(
-                timestampString.Trim(),
-                UtcTimeFormat,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.AssumeUniversal);
-        }
-
-        private static bool IsValidUtcTimeFormat(string timeString)
-        {
-            if (string.IsNullOrEmpty(timeString))
+            if (string.IsNullOrEmpty(timestampString))
             {
-                return false;
+                return ErrorDateTimeConst;
             }
             
-            timeString = timeString.Trim();
-            if (timeString == "1970-01-01")
-            {
-                return true;
-            }
+            timestampString = timestampString.Trim();
             
+            if (timestampString == "1970-01-01")
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            }
             try
             {
-                ParseUtcTimestamp(timeString);
-                return true;
+                return DateTime.ParseExact(
+                    timestampString,
+                    UtcTimeFormat,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal);
             }
-            catch
+            catch (FormatException)
             {
-                return false;
+                return DateTime.MaxValue;
             }
         }
+
     }
 }

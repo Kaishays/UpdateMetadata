@@ -27,12 +27,19 @@ namespace UpdateMetadata.RawMetadata
         {
             foreach (var videoId in databaseVideoIds)
             {
-                await TryUpdateRawMetadata(videoId);
+                try
+                {
+                    await TryUpdateRawMetadata(videoId);
+                }
+                catch {
+                    LogReextractKlv.LogMissingCsvFile(videoId.PathToVideo);
+                }
             }
         }
         private static async Task TryUpdateRawMetadata(TableInstances.VideoID videoId)
         {
-            if(!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo))
+            if(!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo) &&
+                TsVideoFileTest.IsValidVideoFile(videoId.PathToVideo))
             {
                 (bool csvFound, string csvPath) = FindMatchingCsv_.FindMatchingCsv(videoId);
 
