@@ -129,23 +129,27 @@ namespace ValidateKlvExtraction.Tests
             
             foreach (string[] row in metadataRows)
             {
-                if (row.Length > 0 && !string.IsNullOrEmpty(row[0])
-                    && IsValidUtcTimeFormat(row[0]))
+                DateTime currentTimestamp = GetValidTimestampFromRow(row);
+                
+                if (currentTimestamp != ErrorDateTimeConst && !IsWithinTimeThreshold(currentTimestamp))
                 {
-                    DateTime currentTimestamp = ParseUtcTimestamp(row[0]);
-
-                    if (!IsWithinTimeThreshold(currentTimestamp))
-                    {
-                        outOfSequenceCount++;
-                    }
-                    previousTimestamp = currentTimestamp;
+                    outOfSequenceCount++;
                 }
-                else
-                {
-                    previousTimestamp = ErrorDateTimeConst;
-                }
+                
+                previousTimestamp = ErrorDateTimeConst;
             }
+
             return outOfSequenceCount;
+        }
+
+        private static DateTime GetValidTimestampFromRow(string[] row)
+        {
+            if (row.Length == 0 || string.IsNullOrEmpty(row[0]) || !IsValidUtcTimeFormat(row[0]))
+            {
+                return ErrorDateTimeConst;
+            }
+            
+            return ParseUtcTimestamp(row[0]);
         }
 
         private static bool IsWithinTimeThreshold(DateTime currentTimestamp)
@@ -163,6 +167,7 @@ namespace ValidateKlvExtraction.Tests
             TimeSpan difference = currentTimestamp - previousTimestamp;
             TimeSpan absoluteDifference = difference.Duration();
             
+            previousTimestamp = currentTimestamp;
             return absoluteDifference <= MaxTimeDifference;
         }
 
