@@ -11,6 +11,9 @@ using System.Windows.Shapes;
 using System.Threading.Tasks;
 using UpdateMetadata.ReadDatabase;
 using System.Configuration;
+using UpdateMetadata.tests;
+using UpdateMetadata.Y_DriveReader;
+using ValidateKlvExtraction.Tests;
 namespace UpdateMetadata;
 
 /// <summary>
@@ -46,5 +49,36 @@ public partial class MainWindow : Window
         {
             SyncButton.IsEnabled = true;
         }
+    }
+    private async void 
+    ForDebugOnly_SingleFileCheckButton_Click(object sender, RoutedEventArgs e)
+    {
+
+        //  Y:\Flight Tests\AC10\Rockwell Collins Flight 17Mar15\video_17March15\Alticam_2015_3_17_14_6_30.ts
+        // in Db = '29476'
+
+        StatusText.Text = "Single file check initiated...";
+        TableInstances.VideoID videoId = new TableInstances.VideoID();
+        videoId.UniqueVideoID = 281474976710812;
+        videoId.PathToVideo = "Y:\\\\Flight Tests\\\\AC10\\\\Rockwell Collins Flight 17Mar15\\\\video_17March15\\\\Alticam_2015_3_17_14_6_30.ts";
+
+
+        if (!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo) &&
+            TsVideoFileTest.IsValidVideoFile(videoId.PathToVideo))
+        {
+            (bool csvFound, string csvPath) = FindMatchingCsv_.FindMatchingCsv(videoId);
+
+            if (csvFound)
+            {
+                var csvMetadataFields = await
+                    CsvToRawMetadata.ReadCSV(csvPath);
+
+                TestResultsMetadata testResults =
+                    await TestManagerMetadata.ValidateMetadata(
+                    csvPath, videoId, csvMetadataFields);
+
+            }
+        }
+        StatusText.Text = "Ready";
     }
 }
