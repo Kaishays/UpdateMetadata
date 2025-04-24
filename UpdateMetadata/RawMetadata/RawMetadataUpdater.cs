@@ -32,7 +32,7 @@ namespace UpdateMetadata.RawMetadata
                     await TryUpdateRawMetadata(videoId);
                 }
                 catch {
-                    LogReextractKlv.LogMissingCsvFile(videoId.PathToVideo);
+                    LogReextractKlv.LogMissingCsvFile(1, videoId.PathToVideo);
                 }
             }
         }
@@ -52,15 +52,15 @@ namespace UpdateMetadata.RawMetadata
                         await TestManagerMetadata.ValidateMetadata(
                         csvPath, videoId, csvMetadataFields);
 
-                    if (testResults.ShouldUpdate)
+                    if (testResults.ShouldWriteMetadataToDB)
                         await UpdateDatabaseRawMetadata(videoId);
 
                     if (testResults.ShouldReextract)
-                        LogReextractKlv.LogMissingCsvFile(videoId.PathToVideo);
+                        LogReextractKlv.LogMissingCsvFile(testResults, videoId.PathToVideo);
                 }
                 else
                 {
-                    LogReextractKlv.LogMissingCsvFile(videoId.PathToVideo);
+                    LogReextractKlv.LogMissingCsvFile(0, videoId.PathToVideo);
                 }
             }
         }

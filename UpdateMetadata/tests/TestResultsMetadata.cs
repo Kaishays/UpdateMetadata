@@ -11,7 +11,7 @@ namespace UpdateMetadata.tests
         public bool HasRawMetadataInDb { get; set; }
         public bool HasValidCsvVideoRatio { get; set; }
         public bool HasValidUtcTimestamps { get; set; }
-        public bool ShouldUpdate => !HasRawMetadataInDb &&
+        public bool ShouldWriteMetadataToDB => !HasRawMetadataInDb &&
                                     HasValidCsvVideoRatio &&
                                     HasValidUtcTimestamps;
         public bool ShouldReextract => !HasValidCsvVideoRatio ||

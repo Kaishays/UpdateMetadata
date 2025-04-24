@@ -10,15 +10,13 @@ using System.Web;
 namespace UpdateMetadata
 {
     public static class CsvWriter
-    {
-        private const string failKlvValidationCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\FailCheck.csv";
-       
-        public static bool ManageCSV_Append(string message, string filePathToWriteTo)
+    {       
+        public static bool ManageCSV_Append(string message, string targetFile, string filePathToWriteTo)
         {
             bool successfulParse = false;
             while (!successfulParse)
             {
-                successfulParse = AppendToCSV(message, filePathToWriteTo, failKlvValidationCsvPath);
+                successfulParse = AppendToCSV(message, targetFile, filePathToWriteTo);
             }
             return successfulParse;
         }
