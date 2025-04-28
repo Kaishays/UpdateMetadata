@@ -59,8 +59,12 @@ public partial class MainWindow : Window
 
         StatusText.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
-        videoId.UniqueVideoID = 281474976710812;
-        videoId.PathToVideo = "Y:\\\\Flight Tests\\\\AC10\\\\Rockwell Collins Flight 17Mar15\\\\video_17March15\\\\Alticam_2015_3_17_14_6_30.ts";
+        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam09\\\\MWIR36\\\\MWIR36-FLIR Flights\\\\2021_09_20 (Drift Boat Columbia)\\\\Search Gimbal (front)\\\\CH1_2021_09_20_22_32_27.ts";
+
+        string sql = "SELECT UniqueVideoID FROM metadatabase.video_id WHERE PathToVideo LIKE '%" + videoId.PathToVideo + "%'";
+        List<ulong> temp = await MySQLDataAccess.QuerySQL<ulong>(sql, NameLibrary.General.connectionString);
+        videoId.UniqueVideoID = temp[0];
+
 
 
         if (!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo) &&
@@ -80,5 +84,26 @@ public partial class MainWindow : Window
             }
         }
         StatusText.Text = "Ready";
+    }
+
+    private async void GetVideoCountButton_Click(object sender, RoutedEventArgs e)
+    {
+        GetVideoCountButton.IsEnabled = false;
+        StatusText.Text = "Counting videos...";
+        
+        try
+        {
+            string sql = "SELECT COUNT(UniqueVideoID) FROM metadatabase.raw_metadata";
+            List<long> result = await MySQLDataAccess.QuerySQL<long>(sql, NameLibrary.General.connectionString);
+            StatusText.Text = $"Total rows in raw_metadata: {result[0]:N0}";
+        }
+        catch (System.Exception ex)
+        {
+            StatusText.Text = $"Error getting video count: {ex.Message}";
+        }
+        finally
+        {
+            GetVideoCountButton.IsEnabled = true;
+        }
     }
 }

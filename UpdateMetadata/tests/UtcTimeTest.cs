@@ -81,6 +81,7 @@ namespace ValidateKlvExtraction.Tests
             return true;
         }
 
+
         private static int CalculateMaxAllowedInvalidCount(int totalCount)
         {
             return (int)(totalCount * (MaxPercentOutOfThreshold / 100.0));
