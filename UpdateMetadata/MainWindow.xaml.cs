@@ -14,6 +14,7 @@ using System.Configuration;
 using UpdateMetadata.tests;
 using UpdateMetadata.Y_DriveReader;
 using ValidateKlvExtraction.Tests;
+using UpdateMetadata.RawMetadata;
 namespace UpdateMetadata;
 
 /// <summary>
@@ -25,6 +26,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         _ = InitializeAsync();
+        TestMetadataToggle.IsChecked = RawMetadataUpdater.testMetadata;
     }
     public static async Task InitializeAsync()
     {
@@ -65,7 +67,7 @@ public partial class MainWindow : Window
         List<ulong> temp = await MySQLDataAccess.QuerySQL<ulong>(sql, NameLibrary.General.connectionString);
         videoId.UniqueVideoID = temp[0];
 
-
+        RawMetadataUpdater.TryUpdateRawMetadata(videoId);
 
         if (!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo) &&
             TsVideoFileTest.IsValidVideoFile(videoId.PathToVideo))
@@ -105,5 +107,11 @@ public partial class MainWindow : Window
         {
             GetVideoCountButton.IsEnabled = true;
         }
+    }
+
+    private void TestMetadataToggle_Click(object sender, RoutedEventArgs e)
+    {
+        RawMetadataUpdater.testMetadata = TestMetadataToggle.IsChecked ?? true;
+        StatusText.Text = $"Test metadata {(RawMetadataUpdater.testMetadata ? "enabled" : "disabled")}";
     }
 }
