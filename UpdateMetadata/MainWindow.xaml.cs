@@ -15,6 +15,7 @@ using UpdateMetadata.tests;
 using UpdateMetadata.Y_DriveReader;
 using ValidateKlvExtraction.Tests;
 using UpdateMetadata.RawMetadata;
+using System.IO;
 namespace UpdateMetadata;
 
 /// <summary>
@@ -32,12 +33,10 @@ public partial class MainWindow : Window
     {
         await NameLibrary.CreateNameLibrary();
     }
-
     private async void SyncButton_Click(object sender, RoutedEventArgs e)
     {
         SyncButton.IsEnabled = false;
         StatusText.Text = "Syncing...";
-        
         try
         {
             await SyncY_DriveToDatabase.SyncDriveToDB();
@@ -87,7 +86,6 @@ public partial class MainWindow : Window
         }
         StatusText.Text = "Ready";
     }
-
     private async void GetVideoCountButton_Click(object sender, RoutedEventArgs e)
     {
         GetVideoCountButton.IsEnabled = false;
@@ -108,10 +106,44 @@ public partial class MainWindow : Window
             GetVideoCountButton.IsEnabled = true;
         }
     }
-
     private void TestMetadataToggle_Click(object sender, RoutedEventArgs e)
     {
         RawMetadataUpdater.testMetadata = TestMetadataToggle.IsChecked ?? true;
         StatusText.Text = $"Test metadata {(RawMetadataUpdater.testMetadata ? "enabled" : "disabled")}";
+    }
+    private void CountTsFilesButton_Click(object sender, RoutedEventArgs e)
+    {
+        CountTsFilesButton.IsEnabled = false;
+        StatusText.Text = "Counting TypeScript files...";
+        
+        try
+        {
+            string directoryPath = DirectoryPathTextBox.Text;
+            if (string.IsNullOrWhiteSpace(directoryPath))
+            {
+                StatusText.Text = "Please enter a directory path";
+                return;
+            }
+
+            if (!Directory.Exists(directoryPath))
+            {                StatusText.Text = "Directory does not exist";
+                return;
+            }
+
+            int tsFileCount = CountTsFiles(directoryPath);
+            StatusText.Text = $"Found {tsFileCount} TypeScript files in the directory";
+        }
+        catch (Exception ex)
+        {
+            StatusText.Text = $"Error counting files: {ex.Message}";
+        }
+        finally
+        {
+            CountTsFilesButton.IsEnabled = true;
+        }
+    }
+    private int CountTsFiles(string directoryPath)
+    {
+        return Directory.GetFiles(directoryPath, "*.ts", SearchOption.AllDirectories).Length;
     }
 }
