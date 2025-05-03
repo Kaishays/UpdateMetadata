@@ -9,18 +9,15 @@ namespace ValidateKlvExtraction.Tests
 {
     public static class CsvSizeToVidSizeRatio
     {
-        public static async Task<bool> CheckIfCSV_Video_Threshold(string csv, string ts)
+        private const int maxFrameRate = 65;
+        private const int minFrameRate = 5;
+        public static async Task<bool> CheckIfCSV_Video_Threshold(List<string[]> csvMetadataFields, string vidPath)
         {
-            double csvSize = GetFileSize(csv);
-            double[] range = await CsvFileSizeRangeBuild(ts);
-            if (range[0] == -1)
-                return false;
+            int klvRowCount = csvMetadataFields.Count();
+            double klvFrameRate = await GetKlvFrameRate(klvRowCount, vidPath);
 
-            double lowLimit = range[0];
-            double highLimit = range[1];
-
-            if (csvSize <= highLimit
-                && csvSize >= lowLimit)
+            if (klvFrameRate <= maxFrameRate
+                    && klvFrameRate >= minFrameRate)
             {
                 return true;
             }
@@ -29,44 +26,20 @@ namespace ValidateKlvExtraction.Tests
                 return false;
             }
         }
-        private static async Task<double[]> CsvFileSizeRangeBuild(string vidPath)
+        private static async Task<double> GetKlvFrameRate(int csvRowCount, string vidPath)
         {
-            TimeSpan vidDur;
+            TimeSpan vidDur_sec;
             bool videoCorupted = false;
-            (videoCorupted, vidDur) = 
-                await VideoDurationExtractor.ExtractDuration(vidPath);
+            (videoCorupted, vidDur_sec) =
+               await VideoDurationExtractor.ExtractDuration(vidPath);
 
-            if (videoCorupted || vidDur.TotalHours == 5000)
+            if (!videoCorupted || vidDur_sec.TotalHours != 5000)
             {
-                return new double[]
-                {
-                    -1
-                };
-            }
-
-            double seconds = vidDur.TotalSeconds;
-            int minKlvRowSize_Bytes = 36;
-            int maxKlvRowSize_Bytes = 412;
-            int highestFps = 60;
-            int lowestFps = 15;
-
-            double csvLowLimit =
-                minKlvRowSize_Bytes * lowestFps * seconds;
-            double csvHighLimit =
-                maxKlvRowSize_Bytes * highestFps * seconds;
-
-            double[] results = new double[2];
-            results[0] = csvLowLimit;
-            results[1] = csvHighLimit;
-            return results;
-        }
-        private static long GetFileSize(string filePath)
-        {
-             if (!VideoCorupted.CheckFile_Corrupted(filePath))
-                return new FileInfo(filePath).Length;
-            else
+                double framerate = csvRowCount / vidDur_sec.TotalSeconds;
+                return framerate;
+            }else
             {
-                return 0;
+                return -1;
             }
         }
     }

@@ -29,15 +29,15 @@ namespace ValidateKlvExtraction.Tests
                     return (false, TimeSpan.FromHours(FallbackDurationHours));
                 }
 
-                TimeSpan duration = GetPlayerDuration();
-                bool isCorrupt = duration.TotalSeconds == 0;
+                TimeSpan duration_sec = GetPlayerDuration_sec();
+                bool isCorrupt = duration_sec.TotalSeconds == 0;
                 
                 if (isCorrupt)
                 {
-                    duration = TimeSpan.FromHours(FallbackDurationHours);
+                    duration_sec = TimeSpan.FromHours(FallbackDurationHours);
                 }
 
-                return (isCorrupt, duration);
+                return (isCorrupt, duration_sec);
             });
         }
 
@@ -111,7 +111,7 @@ namespace ValidateKlvExtraction.Tests
             return true;
         }
 
-        private static TimeSpan GetPlayerDuration()
+        private static TimeSpan GetPlayerDuration_sec()
         {
             return TimeSpan.FromSeconds(videoPlayer.GetDuration());
         }

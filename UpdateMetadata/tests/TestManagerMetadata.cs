@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,12 @@ namespace UpdateMetadata.tests
                 .TestIfRawMetadataInDB(videoId, csvMetadataFields);
 
             results.HasValidCsvVideoRatio = await CsvSizeToVidSizeRatio
-                    .CheckIfCSV_Video_Threshold(csvFilePath, videoId.PathToVideo);
+                    .CheckIfCSV_Video_Threshold(csvMetadataFields, videoId.PathToVideo);
 
             results.HasValidUtcTimestamps = await UtcTimeTest
                 .ValidateUtcTimestamps(csvFilePath);
+
+            Debug.WriteLine($"Validation Results: HasRawMetadataInDb={results.HasRawMetadataInDb}, HasValidCsvVideoRatio={results.HasValidCsvVideoRatio}, HasValidUtcTimestamps={results.HasValidUtcTimestamps}");
 
             return results;
         }

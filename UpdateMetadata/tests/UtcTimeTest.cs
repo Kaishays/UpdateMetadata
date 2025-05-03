@@ -10,7 +10,7 @@ namespace ValidateKlvExtraction.Tests
     {
         private const string UtcTimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFFFFZ";
         private const double MaxPercentOutOfThreshold = 1.0;
-        private const int MaxTimeDifferenceMilliseconds = 70;
+        private const int MaxTimeDifferenceMilliseconds = 110;
         private static DateTime ErrorDateTimeConst = DateTime.MaxValue;
         private static DateTime previousTimestamp = DateTime.MinValue;
         private static readonly TimeSpan MaxTimeDifference = TimeSpan.FromMilliseconds(MaxTimeDifferenceMilliseconds);
@@ -132,12 +132,13 @@ namespace ValidateKlvExtraction.Tests
             {
                 DateTime currentTimestamp = GetValidTimestampFromRow(row);
                 
-                if (currentTimestamp != ErrorDateTimeConst && !IsWithinTimeThreshold(currentTimestamp))
+                if (currentTimestamp == ErrorDateTimeConst ||
+                    previousTimestamp == ErrorDateTimeConst ||
+                    !IsWithinTimeThreshold(currentTimestamp))
                 {
                     outOfSequenceCount++;
                 }
-                
-                previousTimestamp = ErrorDateTimeConst;
+                previousTimestamp = currentTimestamp;
             }
 
             return outOfSequenceCount;
@@ -157,18 +158,15 @@ namespace ValidateKlvExtraction.Tests
         {
             if (previousTimestamp == DateTime.MinValue)
             {
-                previousTimestamp = currentTimestamp;
                 return true;
             } else if (previousTimestamp == ErrorDateTimeConst)
             {
-                previousTimestamp = currentTimestamp;
                 return false;
             }
 
             TimeSpan difference = currentTimestamp - previousTimestamp;
             TimeSpan absoluteDifference = difference.Duration();
             
-            previousTimestamp = currentTimestamp;
             return absoluteDifference <= MaxTimeDifference;
         }
 

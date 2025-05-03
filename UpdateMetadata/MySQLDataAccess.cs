@@ -29,27 +29,27 @@ namespace UpdateMetadata
         }
         public static async Task ExecuteSQL<GenericParameter_1>(string sql, GenericParameter_1 parameters, string connectionString)
         {
-            using (IDbConnection connection = new MySqlConnection(connectionString))
+/*            using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 Debug.WriteLine(sql);
                 await connection.ExecuteAsync(sql, parameters);
-            }
+            }*/
         }
         public static async Task ExecuteSQL(string sql, string connectionString)
         {
-            using (IDbConnection connection = new MySqlConnection(connectionString))
+          /*  using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 Debug.WriteLine(sql);
                 await connection.ExecuteAsync(sql);
-            }
+            }*/
         }
         public static async Task ExecuteSQL<GenericParameter_1, GenericParameter_>(string sql, GenericParameter_1 parameters, string connectionString)
         {
-            using (IDbConnection connection = new MySqlConnection(connectionString))
+           /* using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 Debug.WriteLine(sql);
                 await connection.ExecuteAsync(sql, parameters);
-            }
+            }*/
         }
     }
 }
