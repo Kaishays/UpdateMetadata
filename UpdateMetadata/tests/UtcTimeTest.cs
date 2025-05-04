@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+using UpdateMetadata;
 
 namespace ValidateKlvExtraction.Tests
 {
@@ -10,7 +11,7 @@ namespace ValidateKlvExtraction.Tests
     {
         private const string UtcTimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFFFFZ";
         private const double MaxPercentOutOfThreshold = 1.0;
-        private const int MaxTimeDifferenceMilliseconds = 110;
+        private static double MaxTimeDifferenceMilliseconds = 1000 / RuntimeVariables.minFrameRate;
         private static DateTime ErrorDateTimeConst = DateTime.MaxValue;
         private static DateTime previousTimestamp = DateTime.MinValue;
         private static readonly TimeSpan MaxTimeDifference = TimeSpan.FromMilliseconds(MaxTimeDifferenceMilliseconds);
@@ -166,8 +167,22 @@ namespace ValidateKlvExtraction.Tests
 
             TimeSpan difference = currentTimestamp - previousTimestamp;
             TimeSpan absoluteDifference = difference.Duration();
-            
-            return absoluteDifference <= MaxTimeDifference;
+
+            bool withinThreshold = absoluteDifference <= MaxTimeDifference;
+            if (withinThreshold)
+            {
+                return true;
+
+            }else
+            {
+                string debugOnly = FormatUtcTimestamp_DebugOnly(currentTimestamp);
+                return false;
+            }
+        }
+
+        public static string FormatUtcTimestamp_DebugOnly(DateTime timestamp)
+        {
+            return timestamp.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss.ffffff'Z'");
         }
 
         private static void ResetPreviousTimestamp()

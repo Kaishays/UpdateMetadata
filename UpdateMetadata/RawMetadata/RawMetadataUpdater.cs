@@ -16,7 +16,8 @@ namespace UpdateMetadata.RawMetadata
     public static class RawMetadataUpdater
     {
         public static bool testMetadata = false;
-        
+        public static SemaphoreSlim extractionSemaphore = new SemaphoreSlim(1, 1);
+
         public static async Task UpdateRawMetadata()
         {
             await UpdateRawMetadata(
@@ -29,12 +30,19 @@ namespace UpdateMetadata.RawMetadata
         {
             foreach (var videoId in databaseVideoIds)
             {
+                await extractionSemaphore.WaitAsync();
+
                 try
                 {
                     await TryUpdateRawMetadata(videoId);
                 }
-                catch {
+                catch 
+                {
                     LogReextractKlv.LogMissingCsvFile(1, videoId.PathToVideo);
+                }
+                finally
+                {
+                    extractionSemaphore.Release();
                 }
             }
         }
@@ -57,6 +65,7 @@ namespace UpdateMetadata.RawMetadata
         }
         private static async Task TestRawMetadata(string csvPath, TableInstances.VideoID videoId)
         {
+            Debug.WriteLine("Testing CSV for: " + videoId.PathToVideo);
             var csvMetadataFields = await
                        CsvToRawMetadata.ReadCSV(csvPath);
 

@@ -4,20 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UpdateMetadata.tests.VidPlayerTests;
 
-namespace ValidateKlvExtraction.Tests
+namespace UpdateMetadata.tests.KlvFramerateTest
 {
-    public static class CsvSizeToVidSizeRatio
+    public static class KlvFramerateTest
     {
-        private const int maxFrameRate = 65;
-        private const int minFrameRate = 5;
-        public static async Task<bool> CheckIfCSV_Video_Threshold(List<string[]> csvMetadataFields, string vidPath)
+        public static async Task<bool> CheckKlvFrameRate(List<string[]> csvMetadataFields, string vidPath)
         {
             int klvRowCount = csvMetadataFields.Count();
             double klvFrameRate = await GetKlvFrameRate(klvRowCount, vidPath);
 
-            if (klvFrameRate <= maxFrameRate
-                    && klvFrameRate >= minFrameRate)
+            if (klvFrameRate <= RuntimeVariables.maxFrameRate
+                    && klvFrameRate >= RuntimeVariables.minFrameRate)
             {
                 return true;
             }
@@ -33,7 +32,7 @@ namespace ValidateKlvExtraction.Tests
             (videoCorupted, vidDur_sec) =
                await VideoDurationExtractor.ExtractDuration(vidPath);
 
-            if (!videoCorupted || vidDur_sec.TotalHours != 5000)
+            if (!videoCorupted)
             {
                 double framerate = csvRowCount / vidDur_sec.TotalSeconds;
                 return framerate;
