@@ -28,9 +28,6 @@ namespace UpdateMetadata.tests
             results.HasValidUtcTimestamps = await UtcTimeTest
                 .ValidateUtcTimestamps(csvFilePath);
 
-            if (!results.HasRawMetadataInDb || !results.HasValidCsvVideoRatio || !results.HasValidUtcTimestamps)
-                MessageBox.Show($"Validation Results: HasRawMetadataInDb={results.HasRawMetadataInDb}, HasValidCsvVideoRatio={results.HasValidCsvVideoRatio}, HasValidUtcTimestamps={results.HasValidUtcTimestamps}, {videoId.PathToVideo}");
-
             return results;
         }
 
