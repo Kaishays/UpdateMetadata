@@ -16,6 +16,7 @@ using UpdateMetadata.Y_DriveReader;
 using ValidateKlvExtraction.Tests;
 using UpdateMetadata.RawMetadata;
 using System.IO;
+using System.Windows.Media.Media3D;
 namespace UpdateMetadata;
 
 /// <summary>
@@ -61,7 +62,7 @@ public partial class MainWindow : Window
         StatusText.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
         videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 14\\\\2018\\\\Flight Test 30october18 Integrator\\\\Video\\\\Alticam_CH3__2018_10_30_13_43_02.ts";
-        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH1_2022_04_07_15_14_12.ts";
+        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH0_2022_04_07_13_47_37.ts";
         string sql = "SELECT UniqueVideoID FROM metadatabase.video_id WHERE PathToVideo LIKE '%" + videoId.PathToVideo + "%'";
         List<ulong> temp = await MySQLDataAccess.QuerySQL<ulong>(sql, NameLibrary.General.connectionString);
         videoId.UniqueVideoID = temp[0];

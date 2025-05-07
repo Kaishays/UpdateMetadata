@@ -20,8 +20,6 @@ namespace UpdateMetadata.tests
             string extension = Path.GetExtension(filePath);
             bool isValid = string.Equals(extension, ".ts", StringComparison.OrdinalIgnoreCase);
             
-       
-            
             return isValid;
         }
     }

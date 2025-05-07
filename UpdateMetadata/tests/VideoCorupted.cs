@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UpdateMetadata.tests;
 
 namespace ValidateKlvExtraction.Tests
 {
@@ -20,7 +21,7 @@ namespace ValidateKlvExtraction.Tests
                 return true;
             }
             FileInfo fileInfo = new FileInfo(filePath);
-            return fileInfo.Length <= 0;
+            return fileInfo.Length < TestRuntimeVars.minSizeForVidFile;
         }
     }
 }
