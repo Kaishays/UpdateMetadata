@@ -18,21 +18,28 @@ namespace UpdateMetadata.videoplayer
 {
     public static class PlayVideo
     {
+
         public static bool StartFilePlayback(string filePath)
         {
-            if (File.Exists(filePath))
+            try
             {
-                return Application.Current.Dispatcher.Invoke(() =>
+                if (File.Exists(filePath))
                 {
-                    bool init = StoreVidPlayer.m_KlvPlayer.Init(filePath);
-                    bool start = StoreVidPlayer.m_KlvPlayer.Start();
-                    HandleCorruptedVids
-                    .StartVerifyFramesArriveFromVideo();
-                    return init && start;
-                });
-            }
-            else
+                    return Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        bool init = StoreVidPlayer.m_KlvPlayer.Init(filePath);
+                        bool start = StoreVidPlayer.m_KlvPlayer.Start();
+                        HandleCorruptedVids
+                        .StartVerifyFramesArriveFromVideo();
+                        return init && start;
+                    });
+                }
                 return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

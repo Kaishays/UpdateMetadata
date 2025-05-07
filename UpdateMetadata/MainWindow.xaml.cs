@@ -60,13 +60,12 @@ public partial class MainWindow : Window
 
         StatusText.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
-        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam09\\\\MWIR36\\\\MWIR36-FLIR Flights\\\\2021_09_20 (Drift Boat Columbia)\\\\Search Gimbal (front)\\\\CH1_2021_09_20_22_32_27.ts";
-
+        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 14\\\\2018\\\\Flight Test 30october18 Integrator\\\\Video\\\\Alticam_CH3__2018_10_30_13_43_02.ts";
+        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH1_2022_04_07_15_14_12.ts";
         string sql = "SELECT UniqueVideoID FROM metadatabase.video_id WHERE PathToVideo LIKE '%" + videoId.PathToVideo + "%'";
         List<ulong> temp = await MySQLDataAccess.QuerySQL<ulong>(sql, NameLibrary.General.connectionString);
         videoId.UniqueVideoID = temp[0];
 
-        RawMetadataUpdater.TryUpdateRawMetadata(videoId);
 
         if (!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo) &&
             TsVideoFileTest.IsValidVideoFile(videoId.PathToVideo))

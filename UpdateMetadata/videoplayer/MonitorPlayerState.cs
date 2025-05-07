@@ -1,6 +1,7 @@
 ﻿using KlvPlayer;
 using StCoreWr;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace UpdateMetadata.videoplayer
 {
@@ -8,19 +9,27 @@ namespace UpdateMetadata.videoplayer
     {
         public static async Task<bool> Manage()
         {
-            if (StoreVidPlayer.m_KlvPlayer != null)
+            try
             {
-                bool playerStateComplete 
-                    = await MonitorVideoPlayerState(StoreVidPlayer.m_KlvPlayer);
-                return playerStateComplete;
-            } else
+                if (StoreVidPlayer.m_KlvPlayer != null)
+                {
+                    bool playerStateComplete
+                        = await MonitorVideoPlayerState(StoreVidPlayer.m_KlvPlayer);
+                    return playerStateComplete;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
             {
                 return false;
             }
         }
         public static async Task<bool> MonitorVideoPlayerState(CKlvPlayer cKlvPlayer)
         {
-            while (cKlvPlayer.PlayerState != Player_State.Running && cKlvPlayer.PlayerState != Player_State.Completed)
+            while (ForDurationExtractor_CheckPlayerState(cKlvPlayer.PlayerState))
             {
                 await Task.Delay(RuntimeVariables.delayMonitorVideoPlayerState);
                 if (HandleCorruptedVids
@@ -30,6 +39,11 @@ namespace UpdateMetadata.videoplayer
                 }
             }
             return true;
+        }
+        private static bool ForDurationExtractor_CheckPlayerState(Player_State playerstate)
+        {
+            return (playerstate != Player_State.Completed
+                && playerstate != Player_State.Starting);
         }
     }
 }
