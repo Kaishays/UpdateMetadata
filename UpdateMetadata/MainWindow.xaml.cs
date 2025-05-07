@@ -73,7 +73,7 @@ public partial class MainWindow : Window
         {
             (bool csvFound, string csvPath) = FindMatchingCsv_.FindMatchingCsv(videoId);
 
-            if (true)
+            if (csvFound)
             {
                 var csvMetadataFields = await
                     CsvToRawMetadata.ReadCSV(csvPath);
