@@ -1,4 +1,4 @@
-﻿using KlvPlayer;
+using KlvPlayer;
 using StCoreWr;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,7 +43,7 @@ namespace UpdateMetadata.videoplayer
         private static bool ForDurationExtractor_CheckPlayerState(Player_State playerstate)
         {
             return (playerstate != Player_State.Completed
-                && playerstate != Player_State.Starting);
+                && playerstate != Player_State.Running);
         }
     }
 }

@@ -62,18 +62,18 @@ public partial class MainWindow : Window
         StatusText.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
         videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 14\\\\2018\\\\Flight Test 30october18 Integrator\\\\Video\\\\Alticam_CH3__2018_10_30_13_43_02.ts";
-        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH0_2022_04_07_13_47_37.ts";
+        //videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH0_2022_04_07_13_47_37.ts";
+        //videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam CLT LWIR\\\\4_4_19 Flight_Test\\\\Alticam_CH1__2019_04_04_13_05_02(1).ts";
         string sql = "SELECT UniqueVideoID FROM metadatabase.video_id WHERE PathToVideo LIKE '%" + videoId.PathToVideo + "%'";
         List<ulong> temp = await MySQLDataAccess.QuerySQL<ulong>(sql, NameLibrary.General.connectionString);
         videoId.UniqueVideoID = temp[0];
-
 
         if (!VideoCorupted.CheckFile_Corrupted(videoId.PathToVideo) &&
             TsVideoFileTest.IsValidVideoFile(videoId.PathToVideo))
         {
             (bool csvFound, string csvPath) = FindMatchingCsv_.FindMatchingCsv(videoId);
 
-            if (csvFound)
+            if (true)
             {
                 var csvMetadataFields = await
                     CsvToRawMetadata.ReadCSV(csvPath);

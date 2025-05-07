@@ -15,7 +15,7 @@ namespace UpdateMetadata.RawMetadata
 {
     public static class RawMetadataUpdater
     {
-        public static bool testMetadata = false;
+        public static bool testMetadata = true;
         public static SemaphoreSlim extractionSemaphore = new SemaphoreSlim(1, 1);
 
         public static async Task UpdateRawMetadata()
