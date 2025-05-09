@@ -16,6 +16,7 @@ namespace UpdateMetadata.videoplayer
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+                    StoreVidPlayer.m_KlvPlayer = new CKlvPlayer();
                     CKlvPlayer cKlvPlayer = new CKlvPlayer();
                     cKlvPlayer = ActivateLicense(cKlvPlayer);
                     cKlvPlayer = ConfigureVariables(cKlvPlayer);

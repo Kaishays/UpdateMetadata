@@ -23,7 +23,7 @@ namespace UpdateMetadata.tests.VidPlayerTests
                 if (PlayVideo.StartFilePlayback(videoFilePath))
                 {
                     if (await MonitorPlayerState.Manage())
-                    {
+                    { 
                         double dur = StoreVidPlayer.m_KlvPlayer.GetDuration(); 
                         if (dur != 0)
                         {
@@ -31,6 +31,13 @@ namespace UpdateMetadata.tests.VidPlayerTests
                             return (false, dur_sec);
                         }   
                     }
+                }else
+                {
+                    StoreVidPlayer.m_KlvPlayer.Stop();
+                    StoreVidPlayer.m_KlvPlayer = null;
+                    StoreVidPlayer.m_KlvPlayer = new CKlvPlayer();
+                    Debug.WriteLine("dONE");
+                    //VideoPlayerErrorHandler.HandleError("Video Player Failed to Init");
                 }
                 return (true, dur_fail);
             }
