@@ -28,28 +28,54 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         _ = InitializeAsync();
-        TestMetadataToggle.IsChecked = RawMetadataUpdater.testMetadata;
+        testModeToggle.IsChecked = RawMetadataUpdater.testMetadata;
+        
+        // Initialize progress counter to zeros
+        UpdateProgressCounter(0, 0);
     }
     public static async Task InitializeAsync()
     {
         await NameLibrary.CreateNameLibrary();
     }
+    /// <summary>
+    /// Updates the progress counter display with current progress information
+    /// </summary>
+    /// <param name="currentIndex">Current processing index</param>
+    /// <param name="totalCount">Total number of items to process</param>
+    public void UpdateProgressCounter(int currentIndex, int totalCount)
+    {
+        // Update the current index display
+        currentIndexDisplay.Text = currentIndex.ToString("N0");
+        
+        // Update the total count display
+        totalCountDisplay.Text = totalCount.ToString("N0");
+        
+        // Calculate and update completion percentage
+        double percentComplete = totalCount > 0 ? (double)currentIndex / totalCount * 100 : 0;
+        completionPercentDisplay.Text = $"{percentComplete:F1}%";
+        
+        // Also update status text if actively processing
+        if (currentIndex > 0 && totalCount > 0)
+        {
+            statusDisplay.Text = $"Processing item {currentIndex:N0} of {totalCount:N0}";
+        }
+    }
     private async void SyncButton_Click(object sender, RoutedEventArgs e)
     {
-        SyncButton.IsEnabled = false;
-        StatusText.Text = "Syncing...";
+        syncYDriveButton.IsEnabled = false;
+        statusDisplay.Text = "Syncing...";
         try
         {
             await SyncY_DriveToDatabase.SyncDriveToDB();
-            StatusText.Text = "Sync completed successfully";
+            statusDisplay.Text = "Sync completed successfully";
         }
         catch (System.Exception ex)
         {
-            StatusText.Text = $"Error: {ex.Message}";
+            statusDisplay.Text = $"Error: {ex.Message}";
         }
         finally
         {
-            SyncButton.IsEnabled = true;
+            syncYDriveButton.IsEnabled = true;
         }
     }
     private async void 
@@ -59,12 +85,11 @@ public partial class MainWindow : Window
         //  Y:\Flight Tests\AC10\Rockwell Collins Flight 17Mar15\video_17March15\Alticam_2015_3_17_14_6_30.ts
         // in Db = '29476'
 
-        StatusText.Text = "Single file check initiated...";
+        statusDisplay.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
-        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 14\\\\2018\\\\Flight Test 30october18 Integrator\\\\Video\\\\Alticam_CH3__2018_10_30_13_43_02.ts";
+        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06 CLT EOMW\\\\2024\\\\2024_03_18_12_13_16 ScanEagle LD\\\\CH1_2024_03_18_13_45_38.ts";
         //videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH0_2022_04_07_13_47_37.ts";
         //videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam CLT LWIR\\\\4_4_19 Flight_Test\\\\Alticam_CH1__2019_04_04_13_05_02(1).ts";
-        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06 CLT EOMW\\\\2024\\\\2024_03_18_12_13_16 ScanEagle LD\\\\CH1_2024_03_18_13_45_38.ts";
         string sql = "SELECT UniqueVideoID FROM metadatabase.video_id WHERE PathToVideo LIKE '%" + videoId.PathToVideo + "%'";
         List<ulong> temp = await MySQLDataAccess.QuerySQL<ulong>(sql, NameLibrary.General.connectionString);
         videoId.UniqueVideoID = temp[0];
@@ -85,62 +110,92 @@ public partial class MainWindow : Window
 
             }
         }
-        StatusText.Text = "Ready";
+        statusDisplay.Text = "Ready";
     }
     private async void GetVideoCountButton_Click(object sender, RoutedEventArgs e)
     {
-        GetVideoCountButton.IsEnabled = false;
-        StatusText.Text = "Counting videos...";
+        metadataCountButton.IsEnabled = false;
+        statusDisplay.Text = "Counting videos...";
         
         try
         {
             string sql = "SELECT COUNT(UniqueVideoID) FROM metadatabase.raw_metadata";
             List<long> result = await MySQLDataAccess.QuerySQL<long>(sql, NameLibrary.General.connectionString);
-            StatusText.Text = $"Total rows in raw_metadata: {result[0]:N0}";
+            statusDisplay.Text = $"Total rows in raw_metadata: {result[0]:N0}";
         }
         catch (System.Exception ex)
         {
-            StatusText.Text = $"Error getting video count: {ex.Message}";
+            statusDisplay.Text = $"Error getting video count: {ex.Message}";
         }
         finally
         {
-            GetVideoCountButton.IsEnabled = true;
+            metadataCountButton.IsEnabled = true;
         }
     }
     private void TestMetadataToggle_Click(object sender, RoutedEventArgs e)
     {
-        RawMetadataUpdater.testMetadata = TestMetadataToggle.IsChecked ?? true;
-        StatusText.Text = $"Test metadata {(RawMetadataUpdater.testMetadata ? "enabled" : "disabled")}";
+        RawMetadataUpdater.testMetadata = testModeToggle.IsChecked ?? true;
+        statusDisplay.Text = $"Test metadata {(RawMetadataUpdater.testMetadata ? "enabled" : "disabled")}";
     }
-    private void CountTsFilesButton_Click(object sender, RoutedEventArgs e)
+    private async void TestProgressButton_Click(object sender, RoutedEventArgs e)
     {
-        CountTsFilesButton.IsEnabled = false;
-        StatusText.Text = "Counting TypeScript files...";
+        // Simulate progress with 100 steps
+        const int totalSteps = 100;
+        
+        testProgressButton.IsEnabled = false;
+        statusDisplay.Text = "Testing progress counter...";
         
         try
         {
-            string directoryPath = DirectoryPathTextBox.Text;
+            for (int i = 1; i <= totalSteps; i++)
+            {
+                // Update the progress counter
+                LogRawMetadataProcess.LogProgress(i, totalSteps);
+                
+                // Simulate processing delay
+                await Task.Delay(50);
+            }
+            
+            statusDisplay.Text = "Progress counter test completed";
+        }
+        catch (Exception ex)
+        {
+            statusDisplay.Text = $"Error during progress test: {ex.Message}";
+        }
+        finally
+        {
+            testProgressButton.IsEnabled = true;
+        }
+    }
+    private void CountTsFilesButton_Click(object sender, RoutedEventArgs e)
+    {
+        fileCountButton.IsEnabled = false;
+        statusDisplay.Text = "Counting TypeScript files...";
+        
+        try
+        {
+            string directoryPath = directoryInput.Text;
             if (string.IsNullOrWhiteSpace(directoryPath))
             {
-                StatusText.Text = "Please enter a directory path";
+                statusDisplay.Text = "Please enter a directory path";
                 return;
             }
 
             if (!Directory.Exists(directoryPath))
-            {                StatusText.Text = "Directory does not exist";
+            {                statusDisplay.Text = "Directory does not exist";
                 return;
             }
 
             int tsFileCount = CountTsFiles(directoryPath);
-            StatusText.Text = $"Found {tsFileCount} TypeScript files in the directory";
+            statusDisplay.Text = $"Found {tsFileCount} TypeScript files in the directory";
         }
         catch (Exception ex)
         {
-            StatusText.Text = $"Error counting files: {ex.Message}";
+            statusDisplay.Text = $"Error counting files: {ex.Message}";
         }
         finally
         {
-            CountTsFilesButton.IsEnabled = true;
+            fileCountButton.IsEnabled = true;
         }
     }
     private int CountTsFiles(string directoryPath)

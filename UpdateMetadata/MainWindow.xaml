@@ -5,132 +5,203 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateMetadata"
         mc:Ignorable="d"
-        Title="Metadata Update Tool" Height="450" Width="800"
+        Title="Metadata Update Tool" Height="500" Width="800"
+        MinHeight="500" MinWidth="400"
         WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <TextBlock Text="Metadata Update Tool" 
-                   FontSize="24" 
-                   FontWeight="Bold" 
-                   Margin="0,0,0,20"/>
-        
-        <StackPanel Grid.Row="1" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Center">
-            <Button x:Name="SyncButton" 
-                    Content="Sync Y Drive to Database" 
-                    Width="250" 
-                    Height="50" 
-                    FontSize="16" 
-                    Margin="0,0,0,20"
-                    Click="SyncButton_Click"/>
-            
-            <Button x:Name="SingleFileCheckButton" 
-                    Content="Single File Check" 
-                    Width="250" 
-                    Height="50" 
-                    FontSize="16" 
-                    Margin="0,0,0,20"
-                    Click="ForDebugOnly_SingleFileCheckButton_Click"/>
-            
-            <Button x:Name="GetVideoCountButton" 
-                    Content="Get RawMetadata Row Count" 
-                    Width="250" 
-                    Height="50" 
-                    FontSize="16" 
-                    Margin="0,0,0,20"
-                    Click="GetVideoCountButton_Click"/>
-            
-            <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Center" 
-                        Margin="0,0,0,20">
-                <TextBlock Text="Test Metadata: " 
+    <Window.Resources>
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="240"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+        <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Border" 
+                                Background="#FFCCCCCC" 
+                                CornerRadius="10" 
+                                Width="60" 
+                                Height="25">
+                            <Grid>
+                                <Ellipse x:Name="Ellipse" 
+                                         Width="19" 
+                                         Height="19" 
+                                         Fill="White" 
+                                         HorizontalAlignment="Left" 
+                                         Margin="3,0,0,0"/>
+                                <TextBlock x:Name="ToggleText" 
+                                           Text="OFF" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Right" 
+                                           Margin="0,0,5,0" 
+                                           FontSize="12"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Ellipse" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="Ellipse" Property="Margin" Value="0,0,3,0"/>
+                                <Setter TargetName="Border" Property="Background" Value="#FF2ECC71"/>
+                                <Setter TargetName="ToggleText" Property="Text" Value="ON"/>
+                                <Setter TargetName="ToggleText" Property="HorizontalAlignment" Value="Left"/>
+                                <Setter TargetName="ToggleText" Property="Margin" Value="5,0,0,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Text="Metadata Update Tool" 
+                          FontSize="22" 
+                          FontWeight="Bold" 
+                          Margin="0,0,0,15"/>
+                
+                <StackPanel Grid.Row="1" 
                            VerticalAlignment="Center" 
-                           Margin="0,0,10,0"/>
-                <ToggleButton x:Name="TestMetadataToggle" 
-                              Width="60" 
-                              Height="25"
-                              IsChecked="True"
-                              Click="TestMetadataToggle_Click">
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Border x:Name="Border" 
-                                                Background="#FFCCCCCC" 
-                                                CornerRadius="10" 
-                                                Width="60" 
-                                                Height="25">
-                                            <Grid>
-                                                <Ellipse x:Name="Ellipse" 
-                                                         Width="19" 
-                                                         Height="19" 
-                                                         Fill="White" 
-                                                         HorizontalAlignment="Left" 
-                                                         Margin="3,0,0,0"/>
-                                                <TextBlock x:Name="ToggleText" 
-                                                           Text="OFF" 
-                                                           VerticalAlignment="Center" 
-                                                           HorizontalAlignment="Right" 
-                                                           Margin="0,0,5,0" 
-                                                           FontSize="12"/>
-                                            </Grid>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="Ellipse" Property="HorizontalAlignment" Value="Right"/>
-                                                <Setter TargetName="Ellipse" Property="Margin" Value="0,0,3,0"/>
-                                                <Setter TargetName="Border" Property="Background" Value="#FF2ECC71"/>
-                                                <Setter TargetName="ToggleText" Property="Text" Value="ON"/>
-                                                <Setter TargetName="ToggleText" Property="HorizontalAlignment" Value="Left"/>
-                                                <Setter TargetName="ToggleText" Property="Margin" Value="5,0,0,0"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-            </StackPanel>
-            
-            <StackPanel Margin="0,0,0,20">
-                <TextBlock Text="Directory Path:" 
-                           Margin="0,0,0,5"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="DirectoryPathTextBox" 
-                             Height="30"
-                             Padding="5"
-                             Margin="0,0,5,0"/>
-                    <Button x:Name="CountTsFilesButton" 
-                            Grid.Column="1"
-                            Content="Count TS Files" 
-                            Height="30"
-                            Padding="10,0"
-                            Click="CountTsFilesButton_Click"/>
-                </Grid>
-            </StackPanel>
-            
-            <TextBlock x:Name="StatusText" 
-                       Text="Ready to sync" 
-                       FontSize="14" 
-                       HorizontalAlignment="Center"/>
-        </StackPanel>
-        
-        <TextBlock Grid.Row="2" 
-                   Text="© 2023 Metadata Update Tool" 
-                   FontSize="10" 
-                   HorizontalAlignment="Center" 
-                   Margin="0,10,0,0"/>
+                           HorizontalAlignment="Center"
+                           Margin="10">
+                    <!-- Main action buttons -->
+                    <Button x:Name="syncYDriveButton" 
+                           Content="Sync Y Drive to Database" 
+                           Style="{StaticResource ActionButtonStyle}"
+                           Click="SyncButton_Click"/>
+                    
+                    <Button x:Name="debugFileCheckButton" 
+                           Content="Single File Check" 
+                           Style="{StaticResource ActionButtonStyle}"
+                           Click="ForDebugOnly_SingleFileCheckButton_Click"/>
+                    
+                    <Button x:Name="metadataCountButton" 
+                           Content="Get RawMetadata Row Count" 
+                           Style="{StaticResource ActionButtonStyle}"
+                           Click="GetVideoCountButton_Click"/>
+                    
+                    <!-- Test progress button -->
+                    <Button x:Name="testProgressButton" 
+                           Content="Test Progress Counter" 
+                           Style="{StaticResource ActionButtonStyle}"
+                           Click="TestProgressButton_Click"/>
+                    
+                    <!-- Progress Counter Section -->
+                    <Border BorderBrush="#E0E0E0" 
+                           BorderThickness="1" 
+                           CornerRadius="5" 
+                           Padding="10"
+                           Margin="0,0,0,15"
+                           Background="#F5F5F5">
+                        <StackPanel>
+                            <TextBlock Text="Progress Counter" 
+                                      FontWeight="SemiBold" 
+                                      HorizontalAlignment="Center" 
+                                      Margin="0,0,0,5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                
+                                <TextBlock Text="Current Index:" 
+                                          Grid.Row="0" 
+                                          Grid.Column="0" 
+                                          Margin="0,0,10,5"/>
+                                <TextBlock x:Name="currentIndexDisplay" 
+                                          Text="0" 
+                                          Grid.Row="0" 
+                                          Grid.Column="1"
+                                          FontWeight="Bold"/>
+                                
+                                <TextBlock Text="Total Count:" 
+                                          Grid.Row="1" 
+                                          Grid.Column="0" 
+                                          Margin="0,0,10,5"/>
+                                <TextBlock x:Name="totalCountDisplay" 
+                                          Text="0" 
+                                          Grid.Row="1" 
+                                          Grid.Column="1"
+                                          FontWeight="Bold"/>
+                                
+                                <TextBlock Text="Completion:" 
+                                          Grid.Row="2" 
+                                          Grid.Column="0" 
+                                          Margin="0,0,10,0"/>
+                                <TextBlock x:Name="completionPercentDisplay" 
+                                          Text="0%" 
+                                          Grid.Row="2" 
+                                          Grid.Column="1"
+                                          FontWeight="Bold"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Test Metadata Toggle -->
+                    <StackPanel Orientation="Horizontal" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,15">
+                        <TextBlock Text="Test Metadata: " 
+                                  VerticalAlignment="Center" 
+                                  Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="testModeToggle" 
+                                     Width="60" 
+                                     Height="25"
+                                     IsChecked="True"
+                                     Style="{StaticResource ToggleButtonStyle}"
+                                     Click="TestMetadataToggle_Click"/>
+                    </StackPanel>
+                    
+                    <!-- Directory Path and TS File Counter -->
+                    <StackPanel Margin="0,0,0,15" MaxWidth="300">
+                        <TextBlock Text="Directory Path:" 
+                                  Margin="0,0,0,5"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="directoryInput" 
+                                    Height="30"
+                                    Padding="5"
+                                    Margin="0,0,5,0"/>
+                            <Button x:Name="fileCountButton" 
+                                   Grid.Column="1"
+                                   Content="Count TS Files" 
+                                   Height="30"
+                                   Padding="10,0"
+                                   Click="CountTsFilesButton_Click"/>
+                        </Grid>
+                    </StackPanel>
+                    
+                    <!-- Status display -->
+                    <TextBlock x:Name="statusDisplay" 
+                              Text="Ready to sync" 
+                              FontSize="14" 
+                              HorizontalAlignment="Center"/>
+                </StackPanel>
+                
+                <!-- Footer -->
+                <TextBlock Grid.Row="2" 
+                          Text="© 2023 Metadata Update Tool" 
+                          FontSize="10" 
+                          HorizontalAlignment="Center" 
+                          Margin="0,10,0,0"/>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Window>

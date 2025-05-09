@@ -39,14 +39,12 @@ namespace UpdateMetadata
      
             CsvWriter.ManageCSV_Append("", videoPath, failKlvValidationCsvPath);
             Debug.WriteLine($"CSV VALIDATION ERROR: {errorString} - {videoPath}");
-            LogErrorCounts();
         }
         public static void LogMissingCsvFile(TestResultsMetadata testResultsMetadata, string videoPath)
         {
             DetermineErrorCount(testResultsMetadata);
             CsvWriter.ManageCSV_Append("", videoPath, failKlvValidationCsvPath);
             Debug.WriteLine($"CSV VALIDATION ERROR: {videoPath}");
-            LogErrorCounts();
         }
         public static void LogErrorCounts()
         {

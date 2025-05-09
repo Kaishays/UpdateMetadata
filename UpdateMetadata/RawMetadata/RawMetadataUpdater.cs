@@ -28,10 +28,12 @@ namespace UpdateMetadata.RawMetadata
             List<TableInstances.VideoID> databaseVideoIds, 
             List<TableInstances.VideoID> driveVideoIds)
         {
+            int index = 0;
             foreach (var videoId in databaseVideoIds)
             {
+                index++;
                 await extractionSemaphore.WaitAsync();
-
+                LogRawMetadataProcess.LogProgress(index, databaseVideoIds.Count);
                 try
                 {
                     await TryUpdateRawMetadata(videoId);
@@ -78,6 +80,8 @@ namespace UpdateMetadata.RawMetadata
 
             if (testResults.ShouldReextract)
                 LogReextractKlv.LogMissingCsvFile(testResults, videoId.PathToVideo);
+
+            LogReextractKlv.LogErrorCounts();
         }
         private static async Task UpdateDatabaseRawMetadata(TableInstances.VideoID videoId) {
             await DeleteFromDb.RemoveOldRawMetadata(videoId);
