@@ -17,6 +17,7 @@ namespace UpdateMetadata
         private static int existingRawMetadataCount = 0;
         private static int invalidCsvVideoRatioCount = 0;
         private static int invalidUtcTimestampsCount = 0;
+        private static int csvFileTooLongCount = 0;
         private const string failKlvValidationCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\FailCheck.csv";
         private const string countErrorsCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\CountFailCheck.csv";
 
@@ -85,6 +86,13 @@ namespace UpdateMetadata
                 hasErrors = true;
             }
 
+            if (csvFileTooLongCount > 0)
+            {
+                if (hasErrors) countSummary.Append(" | ");
+                countSummary.Append($"CSV File Too Long: {csvFileTooLongCount}");
+                hasErrors = true;
+            }
+
             if (!hasErrors)
             {
                 countSummary.Append("No errors detected");
@@ -107,7 +115,12 @@ namespace UpdateMetadata
             if (!testResultsMetadata.HasValidUtcTimestamps)
             {
                 invalidUtcTimestampsCount++;
-            }            
+            }
+            
+            if (testResultsMetadata.CsvDataTooLong)
+            {
+                csvFileTooLongCount++;
+            }
         }
     }
 }

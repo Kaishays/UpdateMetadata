@@ -10,6 +10,7 @@ namespace UpdateMetadata.Y_DriveReader
 {
     public static class CsvToRawMetadata
     {
+        private const int maxLinesToReadFromCsv = 500000;
         public static List<TableInstances.RawMetadata> ConvertCsvToRawMetadata(List<string[]> allFramesInCSV, TableInstances.VideoID videoID_FromDatabase)
         {
             List<TableInstances.RawMetadata> allFrames_RawMetadataList = new List<TableInstances.RawMetadata>();
@@ -46,9 +47,10 @@ namespace UpdateMetadata.Y_DriveReader
             }
             return allFrames_RawMetadataList;
         }
-        public static async Task<List<string[]>> ReadCSV(string csvFilePath)
+        public static async Task<(bool, List<string[]>)> ReadCSV(string csvFilePath)
         {
             List<string[]> allFieldsInCSV = new List<string[]>();
+            int count = 0;
             using (StreamReader reader = new StreamReader(csvFilePath))
             {
                 string? line = await reader.ReadLineAsync();
@@ -56,12 +58,17 @@ namespace UpdateMetadata.Y_DriveReader
                 {
                     string[] fields = line.Split(',');
                     allFieldsInCSV.Add(fields);
-
                     line = await reader.ReadLineAsync();
+                    
+                    count++;
+                    if (count >= maxLinesToReadFromCsv)
+                    {
+                        return (true, new List<string[]>());
+                    }
                 }
             }
             DeleteCSV_FileColumnHeaders(allFieldsInCSV);
-            return allFieldsInCSV;
+            return (false, allFieldsInCSV);
         }
         private static DateTime ParseUtcTime(string UtcTimeStr)
         {

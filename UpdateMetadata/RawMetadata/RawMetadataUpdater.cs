@@ -70,24 +70,71 @@ namespace UpdateMetadata.RawMetadata
                     LogReextractKlv.LogMissingCsvFile(0, videoId.PathToVideo);
                 }
             }
+            LogReextractKlv.LogErrorCounts();
         }
         private static async Task TestRawMetadata(string csvPath, TableInstances.VideoID videoId)
         {
             Debug.WriteLine("Testing CSV for: " + videoId.PathToVideo);
-            var csvMetadataFields = await
-                       CsvToRawMetadata.ReadCSV(csvPath);
+            
+            MemoryTracker memoryTracker = new MemoryTracker();
+            
+            (bool isDataTooLong, List<string[]> csvMetadataFields) = await CsvToRawMetadata.ReadCSV(csvPath);
+            
+            try
+            {
+                var testResults = await CreateMetadataTestResults(isDataTooLong, csvPath, videoId, csvMetadataFields);
 
-            TestResultsMetadata testResults =
-                await TestManagerMetadata.ValidateMetadata(
-                csvPath, videoId, csvMetadataFields);
+                if (testResults.ShouldWriteMetadataToDB)
+                    await UpdateDatabaseRawMetadata(videoId);
 
-            if (testResults.ShouldWriteMetadataToDB)
-                await UpdateDatabaseRawMetadata(videoId);
+                if (testResults.ShouldReextract)
+                    LogReextractKlv.LogMissingCsvFile(testResults, videoId.PathToVideo);
+            }
+            finally
+            {
+                CleanupCsvMetadata(csvMetadataFields);
+                memoryTracker.LogMemoryUsage();
+            }
+        }
 
-            if (testResults.ShouldReextract)
-                LogReextractKlv.LogMissingCsvFile(testResults, videoId.PathToVideo);
+        private static async Task<TestResultsMetadata> CreateMetadataTestResults(bool isDataTooLong, string csvPath, 
+            TableInstances.VideoID videoId, List<string[]> csvMetadataFields)
+        {
+            if (isDataTooLong)
+            {
+                return new TestResultsMetadata
+                {
+                    CsvDataTooLong = true,
+                    HasRawMetadataInDb = false,
+                    HasValidCsvVideoRatio = false,
+                    HasValidUtcTimestamps = false
+                };
+            }
+            TestResultsMetadata testResults = await TestManagerMetadata.ValidateMetadata(csvPath, videoId, csvMetadataFields);
+            return testResults;
+        }
 
-            LogReextractKlv.LogErrorCounts();
+        private static void CleanupCsvMetadata(List<string[]> csvMetadataFields)
+        {
+            csvMetadataFields.Clear();
+            GC.Collect();
+        }
+        
+        private class MemoryTracker
+        {
+            private readonly long _initialMemoryUsage;
+            
+            public MemoryTracker()
+            {
+                _initialMemoryUsage = GC.GetTotalMemory(false) / (1024 * 1024);
+                Debug.WriteLine($"Memory before CSV: {_initialMemoryUsage}MB");
+            }
+            
+            public void LogMemoryUsage()
+            {
+                var currentMemoryUsage = GC.GetTotalMemory(false) / (1024 * 1024);
+                Debug.WriteLine($"Memory after CSV: {currentMemoryUsage}MB (Change: {currentMemoryUsage - _initialMemoryUsage}MB)");
+            }
         }
         private static async Task UpdateDatabaseRawMetadata(TableInstances.VideoID videoId) {
             await DeleteFromDb.RemoveOldRawMetadata(videoId);
