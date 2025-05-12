@@ -66,7 +66,9 @@ namespace UpdateMetadata
             }
             return true;
         }
-        private static async Task LoadDrive_and_Database_into_Lists()
+        
+
+        public static async Task LoadDrive_and_Database_into_Lists()
         {
             var loadDriveTask = Y_DriveLoader.GetVidPaths_and_Hash(NameLibrary.General.pathToDrive, new string[] { "*.ts", "*.mp4" });
             var loadDatabaseTask = VidIDGetter.GetVid_Ids_FromDb();
@@ -75,7 +77,8 @@ namespace UpdateMetadata
 
             driveList_VideoID = await loadDriveTask;
             databaseList_VideoID = await loadDatabaseTask;
-            Debug.WriteLine("done");
+
+            Debug.WriteLine($"Loaded lists from both drive and database lists");
         }
     }
 }

@@ -20,9 +20,15 @@ namespace UpdateMetadata.RawMetadata
 
         public static async Task UpdateRawMetadata()
         {
+            if (!int.TryParse(MainWindow.current.skipItemsInput.Text, out int skipItems))
+                skipItems = 0;
+
+            List<TableInstances.VideoID> databaseList_VideoID_skipped = SyncY_DriveToDatabase.databaseList_VideoID.Skip(skipItems).ToList();
+            List<TableInstances.VideoID> driveList_VideoID_skipped = SyncY_DriveToDatabase.driveList_VideoID.Skip(skipItems).ToList();
+            Debug.WriteLine(databaseList_VideoID_skipped.Count + " " + driveList_VideoID_skipped.Count);
             await UpdateRawMetadata(
-                SyncY_DriveToDatabase.databaseList_VideoID, 
-                SyncY_DriveToDatabase.driveList_VideoID);
+                databaseList_VideoID_skipped,
+                driveList_VideoID_skipped);
         }
         public static async Task UpdateRawMetadata(
             List<TableInstances.VideoID> databaseVideoIds, 

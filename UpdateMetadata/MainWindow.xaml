@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateMetadata"
         mc:Ignorable="d"
-        Title="Metadata Update Tool" Height="500" Width="800"
-        MinHeight="500" MinWidth="400"
+        Title="Metadata Update Tool" Height="700" Width="900"
+        MinHeight="700" MinWidth="700"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="ActionButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="240"/>
+            <Setter Property="Width" Value="320"/>
             <Setter Property="Height" Value="45"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="0,0,0,15"/>
@@ -56,7 +56,7 @@
     </Window.Resources>
     
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid Margin="15">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -70,14 +70,46 @@
                           Margin="0,0,0,15"/>
                 
                 <StackPanel Grid.Row="1" 
-                           VerticalAlignment="Center" 
+                           VerticalAlignment="Top" 
                            HorizontalAlignment="Center"
-                           Margin="10">
+                           Margin="10,10,10,20"
+                           Width="Auto"
+                           MinWidth="600">
                     <!-- Main action buttons -->
                     <Button x:Name="syncYDriveButton" 
                            Content="Sync Y Drive to Database" 
                            Style="{StaticResource ActionButtonStyle}"
                            Click="SyncButton_Click"/>
+                    
+                    <!-- Skip Items Controls -->
+                    <Border BorderBrush="#E0E0E0" 
+                           BorderThickness="1" 
+                           CornerRadius="5" 
+                           Padding="15"
+                           Margin="0,0,0,15"
+                           MinWidth="320"
+                           Background="#F5F5F5">
+                        <StackPanel>
+                            <TextBlock Text="Skip Items" 
+                                      FontWeight="SemiBold" 
+                                      HorizontalAlignment="Center" 
+                                      Margin="0,0,0,5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock Text="Skip Items Count:" 
+                                          Grid.Column="0" 
+                                          Margin="0,0,10,5"/>
+                                <TextBox x:Name="skipItemsInput" 
+                                        Text="0" 
+                                        Grid.Column="1"
+                                        PreviewTextInput="NumberValidationTextBox"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
                     
                     <Button x:Name="debugFileCheckButton" 
                            Content="Single File Check" 
@@ -89,18 +121,14 @@
                            Style="{StaticResource ActionButtonStyle}"
                            Click="GetVideoCountButton_Click"/>
                     
-                    <!-- Test progress button -->
-                    <Button x:Name="testProgressButton" 
-                           Content="Test Progress Counter" 
-                           Style="{StaticResource ActionButtonStyle}"
-                           Click="TestProgressButton_Click"/>
                     
                     <!-- Progress Counter Section -->
                     <Border BorderBrush="#E0E0E0" 
                            BorderThickness="1" 
                            CornerRadius="5" 
-                           Padding="10"
+                           Padding="15"
                            Margin="0,0,0,15"
+                           MinWidth="320"
                            Background="#F5F5F5">
                         <StackPanel>
                             <TextBlock Text="Progress Counter" 
@@ -167,7 +195,7 @@
                     </StackPanel>
                     
                     <!-- Directory Path and TS File Counter -->
-                    <StackPanel Margin="0,0,0,15" MaxWidth="300">
+                    <StackPanel Margin="0,0,0,15" MaxWidth="500">
                         <TextBlock Text="Directory Path:" 
                                   Margin="0,0,0,5"/>
                         <Grid>
@@ -184,6 +212,7 @@
                                    Content="Count TS Files" 
                                    Height="30"
                                    Padding="10,0"
+                                   Width="120"
                                    Click="CountTsFilesButton_Click"/>
                         </Grid>
                     </StackPanel>

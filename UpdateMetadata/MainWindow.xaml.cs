@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,9 +24,11 @@ namespace UpdateMetadata;
 /// </summary>
 public partial class MainWindow : Window
 {
+    public static MainWindow current;
     public MainWindow()
     {
         InitializeComponent();
+        current = this;
         _ = InitializeAsync();
         testModeToggle.IsChecked = RawMetadataUpdater.testMetadata;
         
@@ -67,7 +69,6 @@ public partial class MainWindow : Window
         try
         {
             await SyncY_DriveToDatabase.SyncDriveToDB();
-            statusDisplay.Text = "Sync completed successfully";
         }
         catch (System.Exception ex)
         {
@@ -137,36 +138,6 @@ public partial class MainWindow : Window
         RawMetadataUpdater.testMetadata = testModeToggle.IsChecked ?? true;
         statusDisplay.Text = $"Test metadata {(RawMetadataUpdater.testMetadata ? "enabled" : "disabled")}";
     }
-    private async void TestProgressButton_Click(object sender, RoutedEventArgs e)
-    {
-        // Simulate progress with 100 steps
-        const int totalSteps = 100;
-        
-        testProgressButton.IsEnabled = false;
-        statusDisplay.Text = "Testing progress counter...";
-        
-        try
-        {
-            for (int i = 1; i <= totalSteps; i++)
-            {
-                // Update the progress counter
-                LogRawMetadataProcess.LogProgress(i, totalSteps);
-                
-                // Simulate processing delay
-                await Task.Delay(50);
-            }
-            
-            statusDisplay.Text = "Progress counter test completed";
-        }
-        catch (Exception ex)
-        {
-            statusDisplay.Text = $"Error during progress test: {ex.Message}";
-        }
-        finally
-        {
-            testProgressButton.IsEnabled = true;
-        }
-    }
     private void CountTsFilesButton_Click(object sender, RoutedEventArgs e)
     {
         fileCountButton.IsEnabled = false;
@@ -201,5 +172,11 @@ public partial class MainWindow : Window
     private int CountTsFiles(string directoryPath)
     {
         return Directory.GetFiles(directoryPath, "*.ts", SearchOption.AllDirectories).Length;
+    }
+    private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+    {
+        // Use regular expression to allow only digits
+        System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("[^0-9]+");
+        e.Handled = regex.IsMatch(e.Text);
     }
 }
