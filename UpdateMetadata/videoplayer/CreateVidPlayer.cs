@@ -5,6 +5,9 @@ using StCoreWr;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
+
 
 namespace UpdateMetadata.videoplayer
 {
@@ -14,7 +17,7 @@ namespace UpdateMetadata.videoplayer
         {
             try
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     CKlvPlayer cKlvPlayer = new CKlvPlayer();
                     cKlvPlayer = ActivateLicense(cKlvPlayer);
@@ -73,8 +76,16 @@ namespace UpdateMetadata.videoplayer
             cKlvPlayer.AudioMayBeMissing = true;
             cKlvPlayer.VideoCaptureMode.uncompressedVideo = UncompressedVideoModeWr.UncompressedVideoMode_Rgb;
             cKlvPlayer.FrameAccuracyRequiresSequenceHeaders = false;
-            cKlvPlayer.SetRate(10000);
-            
+            cKlvPlayer.SetRate(1);
+
+
+
+            if (System.Windows.Application.Current.MainWindow is MainWindow mainWindow)
+            {
+                cKlvPlayer.Hwnd = (int)mainWindow.VideoPanel.Handle;
+            }
+
+
             return cKlvPlayer;
         }
         private static void SetVidPlayer(CKlvPlayer cKlvPlayer)

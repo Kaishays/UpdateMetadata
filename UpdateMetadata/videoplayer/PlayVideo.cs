@@ -13,6 +13,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections;
 using Newtonsoft.Json.Linq;
+using Application = System.Windows.Application;
+
 
 namespace UpdateMetadata.videoplayer
 {

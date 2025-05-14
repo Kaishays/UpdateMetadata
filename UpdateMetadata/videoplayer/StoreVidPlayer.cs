@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Application = System.Windows.Application;
 
 namespace UpdateMetadata.videoplayer
 {
@@ -32,7 +33,7 @@ namespace UpdateMetadata.videoplayer
                 {
                     case Player_State.Running:
 
-                        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                         {
                             if (m_fPaused)
                             {
@@ -42,7 +43,7 @@ namespace UpdateMetadata.videoplayer
                         break;
 
                     case Player_State.Paused:
-                        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                         {
                             m_fPaused = true;
                         }));
@@ -52,9 +53,9 @@ namespace UpdateMetadata.videoplayer
                         break;
 
                     case Player_State.Demo_Expired:   //Demo Session expired                  
-                        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                         {
-                            MessageBox.Show("Player Demo Expired", "Demo Expired");
+                            System.Windows.MessageBox.Show("Player Demo Expired", "Demo Expired");
                         }));
                         break;
 

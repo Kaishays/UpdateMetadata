@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UpdateMetadata"
+        xmlns:WinForms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:wf="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         mc:Ignorable="d"
         Title="Metadata Update Tool" Height="700" Width="900"
         MinHeight="700" MinWidth="700"
@@ -178,6 +180,31 @@
                             </Grid>
                         </StackPanel>
                     </Border>
+                    
+                    <!-- Video Display Section -->
+                    <Grid Margin="0,0,0,15" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Text="Video Preview:" 
+                                   Grid.Column="0"
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,10,0"/>
+                        
+                        <Border Grid.Column="1" 
+                                Background="#263238" 
+                                CornerRadius="10" 
+                                Height="60"
+                                Width="85">
+                            <WindowsFormsHost x:Name="hostWinForms" 
+                                              Margin="0" 
+                                              Panel.ZIndex="1">
+                                <WinForms:Panel x:Name="VideoPanel"/>
+                            </WindowsFormsHost>
+                        </Border>
+                    </Grid>
                     
                     <!-- Test Metadata Toggle -->
                     <StackPanel Orientation="Horizontal" 

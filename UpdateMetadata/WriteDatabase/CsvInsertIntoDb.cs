@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using UpdateMetadata.Y_DriveReader;
+using Application = System.Windows.Application;
 
 namespace UpdateMetadata.WriteDatabase
 {

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using UpdateMetadata.videoplayer;
+using Application = System.Windows.Application;
 
 namespace UpdateMetadata.tests.VidPlayerTests
 {
@@ -41,7 +42,7 @@ namespace UpdateMetadata.tests.VidPlayerTests
         }
         private static void CheckIfVidPlayerInit()
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 if (StoreVidPlayer.m_KlvPlayer == null)
                 {

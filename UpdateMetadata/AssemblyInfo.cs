@@ -1,4 +1,5 @@
 using System.Windows;
+using Application = System.Windows.Application;
 
 [assembly:ThemeInfo(
     ResourceDictionaryLocation.None,            //where theme specific resource dictionaries are located

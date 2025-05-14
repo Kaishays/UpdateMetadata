@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Schema;
 using System.Windows;
 using System.Windows.Threading;
+using Application = System.Windows.Application;
 
 namespace UpdateMetadata.RawMetadata
 {
@@ -13,9 +14,9 @@ namespace UpdateMetadata.RawMetadata
     {
         public static void LogProgress(int index, int totalCount)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                if (Application.Current.MainWindow is MainWindow mainWindow)
+                if (System.Windows.Application.Current.MainWindow is MainWindow mainWindow)
                 {
                     mainWindow.UpdateProgressCounter(index, totalCount);
                 }

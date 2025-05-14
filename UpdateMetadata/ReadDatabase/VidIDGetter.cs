@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Configuration;
+using Application = System.Windows.Application;
 
 namespace UpdateMetadata.ReadDatabase
 {

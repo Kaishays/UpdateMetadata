@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Threading;
 using UpdateMetadata.tests.VidPlayerTests;
 using UpdateMetadata.RawMetadata;
+using Application = System.Windows.Application;
 
 namespace UpdateMetadata.videoplayer
 {
