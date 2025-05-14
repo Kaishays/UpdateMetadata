@@ -17,6 +17,20 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+        <Style x:Key="SectionBorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Background" Value="#F5F5F5"/>
+        </Style>
         <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
             <Setter Property="Template">
                 <Setter.Value>
@@ -71,185 +85,219 @@
                           FontWeight="Bold" 
                           Margin="0,0,0,15"/>
                 
-                <StackPanel Grid.Row="1" 
-                           VerticalAlignment="Top" 
-                           HorizontalAlignment="Center"
-                           Margin="10,10,10,20"
-                           Width="Auto"
-                           MinWidth="600">
-                    <!-- Main action buttons -->
-                    <Button x:Name="syncYDriveButton" 
-                           Content="Sync Y Drive to Database" 
-                           Style="{StaticResource ActionButtonStyle}"
-                           Click="SyncButton_Click"/>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     
-                    <!-- Skip Items Controls -->
-                    <Border BorderBrush="#E0E0E0" 
-                           BorderThickness="1" 
-                           CornerRadius="5" 
-                           Padding="15"
-                           Margin="0,0,0,15"
-                           MinWidth="320"
-                           Background="#F5F5F5">
-                        <StackPanel>
-                            <TextBlock Text="Skip Items" 
-                                      FontWeight="SemiBold" 
-                                      HorizontalAlignment="Center" 
-                                      Margin="0,0,0,5"/>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                
-                                <TextBlock Text="Skip Items Count:" 
-                                          Grid.Column="0" 
-                                          Margin="0,0,10,5"/>
-                                <TextBox x:Name="skipItemsInput" 
-                                        Text="0" 
-                                        Grid.Column="1"
-                                        PreviewTextInput="NumberValidationTextBox"/>
-                            </Grid>
-                        </StackPanel>
+                    <!-- Status display - prominently positioned at top of both columns -->
+                    <Border Grid.Row="0" 
+                            Background="#F0F8FF" 
+                            BorderBrush="#B0C4DE" 
+                            BorderThickness="1" 
+                            CornerRadius="5" 
+                            Padding="15" 
+                            Margin="0,0,0,15">
+                        <TextBlock x:Name="statusDisplay" 
+                                  Text="Ready to sync" 
+                                  FontSize="18" 
+                                  FontWeight="SemiBold"
+                                  Foreground="#2C3E50"
+                                  HorizontalAlignment="Center"/>
                     </Border>
                     
-                    <Button x:Name="debugFileCheckButton" 
-                           Content="Single File Check" 
-                           Style="{StaticResource ActionButtonStyle}"
-                           Click="ForDebugOnly_SingleFileCheckButton_Click"/>
-                    
-                    <Button x:Name="metadataCountButton" 
-                           Content="Get RawMetadata Row Count" 
-                           Style="{StaticResource ActionButtonStyle}"
-                           Click="GetVideoCountButton_Click"/>
-                    
-                    
-                    <!-- Progress Counter Section -->
-                    <Border BorderBrush="#E0E0E0" 
-                           BorderThickness="1" 
-                           CornerRadius="5" 
-                           Padding="15"
-                           Margin="0,0,0,15"
-                           MinWidth="320"
-                           Background="#F5F5F5">
-                        <StackPanel>
-                            <TextBlock Text="Progress Counter" 
-                                      FontWeight="SemiBold" 
-                                      HorizontalAlignment="Center" 
-                                      Margin="0,0,0,5"/>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                
-                                <TextBlock Text="Current Index:" 
-                                          Grid.Row="0" 
-                                          Grid.Column="0" 
-                                          Margin="0,0,10,5"/>
-                                <TextBlock x:Name="currentIndexDisplay" 
-                                          Text="0" 
-                                          Grid.Row="0" 
-                                          Grid.Column="1"
-                                          FontWeight="Bold"/>
-                                
-                                <TextBlock Text="Total Count:" 
-                                          Grid.Row="1" 
-                                          Grid.Column="0" 
-                                          Margin="0,0,10,5"/>
-                                <TextBlock x:Name="totalCountDisplay" 
-                                          Text="0" 
-                                          Grid.Row="1" 
-                                          Grid.Column="1"
-                                          FontWeight="Bold"/>
-                                
-                                <TextBlock Text="Completion:" 
-                                          Grid.Row="2" 
-                                          Grid.Column="0" 
-                                          Margin="0,0,10,0"/>
-                                <TextBlock x:Name="completionPercentDisplay" 
-                                          Text="0%" 
-                                          Grid.Row="2" 
-                                          Grid.Column="1"
-                                          FontWeight="Bold"/>
-                            </Grid>
-                        </StackPanel>
-                    </Border>
-                    
-                    <!-- Video Display Section -->
-                    <Grid Margin="0,0,0,15" HorizontalAlignment="Center">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         
-                        <TextBlock Text="Video Preview:" 
-                                   Grid.Column="0"
-                                   VerticalAlignment="Center" 
-                                   Margin="0,0,10,0"/>
+                        <!-- MAIN OPERATIONS COLUMN -->
+                        <StackPanel Grid.Column="0" 
+                                    Margin="10,10,15,20">
+                            
+                            <TextBlock Text="Main Operations" 
+                                       Style="{StaticResource SectionHeaderStyle}"/>
+                            
+                            <!-- Combined Test Settings Section -->
+                            <Border Style="{StaticResource SectionBorderStyle}"
+                                    MinWidth="320">
+                                <StackPanel>
+                                    <TextBlock Text="RawMetadata Test Settings" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,10"/>
+                                    
+                                    <!-- Test Metadata Toggle -->
+                                    <StackPanel Orientation="Horizontal" 
+                                               HorizontalAlignment="Center"
+                                               Margin="0,0,0,15">
+                                        <TextBlock Text="Test Metadata: " 
+                                                  VerticalAlignment="Center" 
+                                                  Margin="0,0,10,0"/>
+                                        <ToggleButton x:Name="testModeToggle" 
+                                                     Width="60" 
+                                                     Height="25"
+                                                     IsChecked="True"
+                                                     Style="{StaticResource ToggleButtonStyle}"
+                                                     Click="TestMetadataToggle_Click"/>
+                                    </StackPanel>
+                                    
+                                    <!-- Skip Items Controls -->
+                                    <TextBlock Text="Skip RawMetadata Tests:" 
+                                              HorizontalAlignment="Center"
+                                              Margin="0,0,0,5"/>
+                                    <Grid Width="280">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <TextBlock Text="Count:" 
+                                                   Grid.Column="0" 
+                                                   Margin="0,0,10,5"/>
+                                        <TextBox x:Name="skipItemsInput" 
+                                                Text="0" 
+                                                Grid.Column="1"
+                                                PreviewTextInput="NumberValidationTextBox"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Main Sync Button -->
+                            <Button x:Name="syncYDriveButton" 
+                                    Content="Sync Y Drive to Database" 
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Click="SyncButton_Click"/>
+                            
+                            <!-- Progress Counter Section -->
+                            <Border Style="{StaticResource SectionBorderStyle}"
+                                    MinWidth="320">
+                                <StackPanel>
+                                    <TextBlock Text="Progress Counter" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,5"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <TextBlock Text="Current Index:" 
+                                                   Grid.Row="0" 
+                                                   Grid.Column="0" 
+                                                   Margin="0,0,10,5"/>
+                                        <TextBlock x:Name="currentIndexDisplay" 
+                                                   Text="0" 
+                                                   Grid.Row="0" 
+                                                   Grid.Column="1"
+                                                   FontWeight="Bold"/>
+                                        
+                                        <TextBlock Text="Total Count:" 
+                                                   Grid.Row="1" 
+                                                   Grid.Column="0" 
+                                                   Margin="0,0,10,5"/>
+                                        <TextBlock x:Name="totalCountDisplay" 
+                                                   Text="0" 
+                                                   Grid.Row="1" 
+                                                   Grid.Column="1"
+                                                   FontWeight="Bold"/>
+                                        
+                                        <TextBlock Text="Completion:" 
+                                                   Grid.Row="2" 
+                                                   Grid.Column="0" 
+                                                   Margin="0,0,10,0"/>
+                                        <TextBlock x:Name="completionPercentDisplay" 
+                                                   Text="0%" 
+                                                   Grid.Row="2" 
+                                                   Grid.Column="1"
+                                                   FontWeight="Bold"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Video Display Section -->
+                            <Border Style="{StaticResource SectionBorderStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Video Preview" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,10"/>
+                                    <Grid HorizontalAlignment="Center">
+                                        <Border Background="#263238" 
+                                                CornerRadius="10" 
+                                                Height="60"
+                                                Width="85">
+                                            <WindowsFormsHost x:Name="hostWinForms" 
+                                                              Margin="0" 
+                                                              Panel.ZIndex="1">
+                                                <WinForms:Panel x:Name="VideoPanel"/>
+                                            </WindowsFormsHost>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
                         
-                        <Border Grid.Column="1" 
-                                Background="#263238" 
-                                CornerRadius="10" 
-                                Height="60"
-                                Width="85">
-                            <WindowsFormsHost x:Name="hostWinForms" 
-                                              Margin="0" 
-                                              Panel.ZIndex="1">
-                                <WinForms:Panel x:Name="VideoPanel"/>
-                            </WindowsFormsHost>
-                        </Border>
+                        <!-- DEBUG OPERATIONS COLUMN -->
+                        <StackPanel Grid.Column="1" 
+                                    Margin="15,10,10,20">
+                                    
+                            <TextBlock Text="Debug Operations" 
+                                       Style="{StaticResource SectionHeaderStyle}"/>
+                                    
+                            <!-- Single File Check Button -->
+                            <Button x:Name="debugFileCheckButton" 
+                                    Content="Single File Check" 
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Click="ForDebugOnly_SingleFileCheckButton_Click"/>
+                                    
+                            <!-- Row Count Button -->
+                            <Button x:Name="metadataCountButton" 
+                                    Content="Get RawMetadata Row Count" 
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Click="GetVideoCountButton_Click"/>
+                                    
+                            <!-- Directory Path and TS File Counter -->
+                            <Border Style="{StaticResource SectionBorderStyle}"
+                                    MinWidth="320">
+                                <StackPanel>
+                                    <TextBlock Text="Directory Path Tools" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,10"/>
+                                        
+                                    <TextBlock Text="Directory Path:" 
+                                               Margin="0,0,0,5"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="directoryInput" 
+                                                 Height="30"
+                                                 Padding="5"
+                                                 Margin="0,0,5,0"/>
+                                        <Button x:Name="fileCountButton" 
+                                                Grid.Column="1"
+                                                Content="Count TS Files" 
+                                                Height="30"
+                                                Padding="10,0"
+                                                Width="120"
+                                                Click="CountTsFilesButton_Click"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
                     </Grid>
-                    
-                    <!-- Test Metadata Toggle -->
-                    <StackPanel Orientation="Horizontal" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,0,0,15">
-                        <TextBlock Text="Test Metadata: " 
-                                  VerticalAlignment="Center" 
-                                  Margin="0,0,10,0"/>
-                        <ToggleButton x:Name="testModeToggle" 
-                                     Width="60" 
-                                     Height="25"
-                                     IsChecked="True"
-                                     Style="{StaticResource ToggleButtonStyle}"
-                                     Click="TestMetadataToggle_Click"/>
-                    </StackPanel>
-                    
-                    <!-- Directory Path and TS File Counter -->
-                    <StackPanel Margin="0,0,0,15" MaxWidth="500">
-                        <TextBlock Text="Directory Path:" 
-                                  Margin="0,0,0,5"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="directoryInput" 
-                                    Height="30"
-                                    Padding="5"
-                                    Margin="0,0,5,0"/>
-                            <Button x:Name="fileCountButton" 
-                                   Grid.Column="1"
-                                   Content="Count TS Files" 
-                                   Height="30"
-                                   Padding="10,0"
-                                   Width="120"
-                                   Click="CountTsFilesButton_Click"/>
-                        </Grid>
-                    </StackPanel>
-                    
-                    <!-- Status display -->
-                    <TextBlock x:Name="statusDisplay" 
-                              Text="Ready to sync" 
-                              FontSize="14" 
-                              HorizontalAlignment="Center"/>
-                </StackPanel>
+                </Grid>
                 
                 <!-- Footer -->
                 <TextBlock Grid.Row="2" 
