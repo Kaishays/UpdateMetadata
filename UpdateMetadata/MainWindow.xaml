@@ -101,7 +101,7 @@
                             Margin="0,0,0,15">
                         <TextBlock x:Name="statusDisplay" 
                                   Text="Ready to sync" 
-                                  FontSize="18" 
+                                  FontSize="15" 
                                   FontWeight="SemiBold"
                                   Foreground="#2C3E50"
                                   HorizontalAlignment="Center"/>
