@@ -34,7 +34,6 @@ namespace UpdateMetadata.videoplayer
         {
             verifyFramesArriveFromVideo.Reset();
             verifyFramesArriveFromVideo.Start();
-
         }
         public static void StartVerifyFramesArriveFromVideo()
         {

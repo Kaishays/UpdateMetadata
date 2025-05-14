@@ -100,18 +100,23 @@ namespace UpdateMetadata.RawMetadata
         private static async Task<TestResultsMetadata> CreateMetadataTestResults(bool isDataTooLong, string csvPath, 
             TableInstances.VideoID videoId, List<string[]> csvMetadataFields)
         {
+            TestResultsMetadata testRes;
             if (isDataTooLong)
             {
-                return new TestResultsMetadata
+                testRes = new TestResultsMetadata
                 {
                     CsvDataTooLong = true,
                     HasRawMetadataInDb = false,
                     HasValidCsvVideoRatio = false,
                     HasValidUtcTimestamps = false
                 };
+            }else
+            {
+                testRes = await TestManagerMetadata.ValidateMetadata(csvPath, videoId, csvMetadataFields);
+
             }
-            TestResultsMetadata testResults = await TestManagerMetadata.ValidateMetadata(csvPath, videoId, csvMetadataFields);
-            return testResults;
+            LogReextractKlv.DetermineErrorCount(testRes);
+            return testRes;
         }
 
         private static void CleanupCsvMetadata(List<string[]> csvMetadataFields)

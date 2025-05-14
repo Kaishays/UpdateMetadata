@@ -14,7 +14,7 @@ namespace UpdateMetadata
     {
         private static int csvFileNotFoundCount = 0;
         private static int unhandledErrorCount = 0;
-        private static int existingRawMetadataCount = 0;
+        private static int existingCountRawMetadataInDatabase = 0;
         private static int invalidCsvVideoRatioCount = 0;
         private static int invalidUtcTimestampsCount = 0;
         private static int csvFileTooLongCount = 0;
@@ -43,7 +43,6 @@ namespace UpdateMetadata
         }
         public static void LogMissingCsvFile(TestResultsMetadata testResultsMetadata, string videoPath)
         {
-            DetermineErrorCount(testResultsMetadata);
             CsvWriter.ManageCSV_Append("", videoPath, failKlvValidationCsvPath);
             Debug.WriteLine($"CSV VALIDATION ERROR: {videoPath}");
         }
@@ -65,10 +64,10 @@ namespace UpdateMetadata
                 hasErrors = true;
             }
 
-            if (existingRawMetadataCount > 0)
+            if (existingCountRawMetadataInDatabase > 0)
             {
                 if (hasErrors) countSummary.Append(" | ");
-                countSummary.Append($"Metadata Already in DB: {existingRawMetadataCount}");
+                countSummary.Append($"Metadata Already in DB: {existingCountRawMetadataInDatabase}");
                 hasErrors = true;
             }
 
@@ -100,11 +99,11 @@ namespace UpdateMetadata
 
             CsvWriter.ManageCSV_Append("", countSummary.ToString(), countErrorsCsvPath);
         }
-        private static void DetermineErrorCount(TestResultsMetadata testResultsMetadata)
+        public static void DetermineErrorCount(TestResultsMetadata testResultsMetadata)
         {
             if (testResultsMetadata.HasRawMetadataInDb)
             {
-                existingRawMetadataCount++;
+                existingCountRawMetadataInDatabase++;
             }
 
             if (!testResultsMetadata.HasValidCsvVideoRatio)
