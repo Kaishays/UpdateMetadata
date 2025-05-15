@@ -36,9 +36,7 @@ public partial class MainWindow : Window
         current = this;
         _ = InitializeAsync();
         testModeToggle.IsChecked = RawMetadataUpdater.testMetadata;
-        
-        // Initialize progress counter to zeros
-        UpdateProgressCounter(0, 0);
+         UpdateProgressCounter(0, 0);
         
     }
     public static async Task InitializeAsync()
@@ -88,7 +86,6 @@ public partial class MainWindow : Window
     private async void 
     ForDebugOnly_SingleFileCheckButton_Click(object sender, RoutedEventArgs e)
     {
-
         //  Y:\Flight Tests\AC10\Rockwell Collins Flight 17Mar15\video_17March15\Alticam_2015_3_17_14_6_30.ts
         // in Db = '29476'
 

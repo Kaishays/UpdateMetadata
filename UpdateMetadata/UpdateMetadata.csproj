@@ -67,6 +67,7 @@
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Sentry" Version="5.7.0" />
   </ItemGroup>
 
   <!-- Add post-build event to copy DLLs directly to output directory -->
