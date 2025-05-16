@@ -37,7 +37,6 @@ public partial class MainWindow : Window
         _ = InitializeAsync();
         testModeToggle.IsChecked = RawMetadataUpdater.testMetadata;
          UpdateProgressCounter(0, 0);
-        
     }
     public static async Task InitializeAsync()
     {
@@ -88,7 +87,6 @@ public partial class MainWindow : Window
     {
         //  Y:\Flight Tests\AC10\Rockwell Collins Flight 17Mar15\video_17March15\Alticam_2015_3_17_14_6_30.ts
         // in Db = '29476'
-
         statusDisplay.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
         videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06 CLT EOMW\\\\2024\\\\2024_03_18_12_13_16 ScanEagle LD\\\\CH1_2024_03_18_13_45_38.ts";

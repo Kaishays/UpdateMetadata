@@ -74,7 +74,7 @@ namespace UpdateMetadata.CompressKlvMetadata
         }
         public static void CalculateLongestLowChangeTimespan(List<double> klvList)
         {
-            double maxChangeAllowed = 100.0;
+            /*double maxChangeAllowed = 100.0;
             int indexA = 0;
             int indexB = 0;
             double currentTotal = 0;
@@ -94,7 +94,7 @@ namespace UpdateMetadata.CompressKlvMetadata
                     indexA = indexB;
 
                 }
-            }
+            }*/
         }
         
 
