@@ -89,22 +89,34 @@ namespace UpdateMetadata.CompressKlvMetadata
             public float? SlantRange_m_min { get; set; }
             public float? SlantRange_m_max { get; set; }
         }
-        public static async Task ManageMM()
+
+        public static async Task<bool> ProcessSingleVideo(TableInstances.VideoID videoId)
         {
-            List<CompressedMetadataTemp> compressedMetadataTempList
-             = await MaxMinKlvCalc.CalcMaxMin();
-            foreach (CompressedMetadataTemp x in compressedMetadataTempList)
-            {
-                await MySQLDataAccess.ExecuteSQL<CompressedMetadataTemp>(
-                SQL_QueriesStore.CompressedMetadata.InsertCompressedMetadataQuery,
-                x,
+            var metadata = await CalcMaxMinForSingleVideo(videoId);
+            if (metadata == null)
+                return false;
+
+            await InsertMetadata(metadata);
+            return true;
+        }
+
+        private static async Task<CompressedMetadataTemp> CalcMaxMinForSingleVideo(TableInstances.VideoID videoId)
+        {
+            var results = await MySQLDataAccess.QuerySQL<CompressedMetadataTemp, TableInstances.VideoID>(
+                SQL_QueriesStore.CompressedMetadata.calcForOneVidID,
+                videoId,
                 NameLibrary.General.connectionString);
-            }
+            
+            return results.FirstOrDefault();
         }
-        public static async Task<List<CompressedMetadataTemp>> CalcMaxMin()
+
+        private static async Task InsertMetadata(CompressedMetadataTemp metadata)
         {
-            return await MySQLDataAccess.QuerySQL<CompressedMetadataTemp>(
-                SQL_QueriesStore.CompressedMetadata.calc, NameLibrary.General.connectionString);
+            await MySQLDataAccess.ExecuteSQL<CompressedMetadataTemp>(
+                SQL_QueriesStore.CompressedMetadata.InsertCompressedMetadataQuery,
+                metadata,
+                NameLibrary.General.connectionString);
         }
+
     }
 }

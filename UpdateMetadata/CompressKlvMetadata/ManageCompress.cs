@@ -49,8 +49,7 @@ namespace UpdateMetadata.CompressKlvMetadata
         }
         public static async Task TryCompressRawMetadata(TableInstances.VideoID videoId)
         {
-            // bin calc 
-
+           await MaxMinKlvCalc.ProcessSingleVideo(videoId);
 
 
             // flight distance

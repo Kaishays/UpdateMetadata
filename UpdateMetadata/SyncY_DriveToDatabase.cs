@@ -41,6 +41,8 @@ namespace UpdateMetadata
                 Debug.WriteLine("Updating Raw Metadata. Will print <Done> when complete");
                 await RawMetadataUpdater.UpdateRawMetadata();
 
+                await ManageCompress.CompressRawMetadata();
+
                 Debug.WriteLine("Done");
             }
             catch (Exception e)

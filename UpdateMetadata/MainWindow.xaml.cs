@@ -20,6 +20,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Application = System.Windows.Application;
+using UpdateMetadata.CompressKlvMetadata;
 namespace UpdateMetadata;
 
 /// <summary>
@@ -28,8 +29,7 @@ namespace UpdateMetadata;
 public partial class MainWindow : Window
 {
     public static MainWindow current;
-    
-    
+   
     public MainWindow()
     {
         InitializeComponent();
@@ -89,6 +89,17 @@ public partial class MainWindow : Window
         // in Db = '29476'
         statusDisplay.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
+        videoId.UniqueVideoID = 5348024557550169;
+
+        await ManageCompress.TryCompressRawMetadata(videoId);
+
+
+
+
+
+
+
+
         videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06 CLT EOMW\\\\2024\\\\2024_03_18_12_13_16 ScanEagle LD\\\\CH1_2024_03_18_13_45_38.ts";
         videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06EOIR2\\\\2024_11_06_16_21_06 EOIR2 1.2.1 Roll Tilt checkout\\\\Clip_CH1_2024_11_06_16_39_35.ts";
        // videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH0_2022_04_07_13_47_37.ts";

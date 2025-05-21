@@ -38,7 +38,7 @@ namespace UpdateMetadata.CompressKlvMetadata
         // d = unique change threshold set for each parameter
 
         // narrow scope
-        // 1) find videos with max/min </> each field (2025 ,jan, nighttime, "SX8" Sensor, slant rnage of 1500 meters)
+        // 1) find videos with max/min </> each field (2025 ,jan, nighttime, "SX8" Sensor, slant range of 1500 meters)
         // returns vidIDList
         // 2) find videos with >= n frames with d (fields are independent) 
         // returns vidIDList
@@ -61,7 +61,7 @@ namespace UpdateMetadata.CompressKlvMetadata
         // if change f'(x) 
         // and total change T(x) = f(x) = s[f'(x)]dx from [a to b]
         // find the greatest b - a where T(x) <= d
-
+          
         // f'(x) = [n0, n1, n3, ... ne)
         // T(x) for a given interval = sum(na > nb)
         // T(x) = 

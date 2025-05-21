@@ -591,7 +591,7 @@ namespace UpdateMetadata
                     @SlantRange_m_max
                     );
                     ";
-            public static string calc = @"
+            public static string calcForOneVidID = @"
                 SELECT 
                 UniqueVideoID,
                 MIN(FrameIndex) AS FrameIndex_min,
@@ -637,8 +637,8 @@ namespace UpdateMetadata
                 MIN(SlantRange_m) AS SlantRange_m_min,
                 MAX(SlantRange_m) AS SlantRange_m_max
                 FROM metadatabase.raw_metadata
-                GROUP BY UniqueVideoID
-                ORDER BY UniqueVideoID DESC  -- Ensures latest video IDs are processed first
+                WHERE UniqueVideoID = @UniqueVideoID
+                group by UniqueVideoID
                 ";
         }
         public static class GetNames
