@@ -19,9 +19,6 @@ namespace UpdateMetadata
         private static int invalidUtcTimestampsCount = 0;
         private static int csvFileTooLongCount = 0;
         private static int invalidCsvHashCount = 0;
-        private const string failKlvValidationCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\ReextractKlv.csv";
-        private const string countErrorsCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\CountFailCheck.csv";
-
         public static void LogMissingCsvFile(int errorCode, string videoPath)
         {
             string errorString = "";
@@ -39,12 +36,12 @@ namespace UpdateMetadata
                     break;
             }
      
-            CsvWriter.ManageCSV_Append("", videoPath, failKlvValidationCsvPath);
+            CsvWriter.ManageCSV_Append("", videoPath, RuntimeVariables.failKlvValidationCsvPath);
             Debug.WriteLine($"CSV VALIDATION ERROR: {errorString} - {videoPath}");
         }
         public static void LogMissingCsvFile(TestResultsMetadata testResultsMetadata, string videoPath)
         {
-            CsvWriter.ManageCSV_Append("", videoPath, failKlvValidationCsvPath);
+            CsvWriter.ManageCSV_Append("", videoPath, RuntimeVariables.failKlvValidationCsvPath);
             Debug.WriteLine($"CSV VALIDATION ERROR: {videoPath}");
         }
         public static void LogErrorCounts()
@@ -105,7 +102,7 @@ namespace UpdateMetadata
                 countSummary.Append("No errors detected");
             }
 
-            CsvWriter.ManageCSV_Append("", countSummary.ToString(), countErrorsCsvPath);
+            CsvWriter.ManageCSV_Append("", countSummary.ToString(), RuntimeVariables.countErrorsCsvPath);
         }
         public static void DetermineErrorCount(TestResultsMetadata testResultsMetadata)
         {

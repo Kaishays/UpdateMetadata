@@ -180,6 +180,25 @@ public partial class MainWindow : Window
     {
         return Directory.GetFiles(directoryPath, "*.ts", SearchOption.AllDirectories).Length;
     }
+    private void AddYDriveToReextractButton_Click(object sender, RoutedEventArgs e)
+    {
+        addYDriveToReextractButton.IsEnabled = false;
+        statusDisplay.Text = "Adding all Y Drive TS files to reextract CSV...";
+        
+        try
+        {
+            AddYdriveToReextractCsv.AddAllTsFilesToReextractCsv();
+            statusDisplay.Text = "All Y Drive TS files added to reextract CSV successfully";
+        }
+        catch (Exception ex)
+        {
+            statusDisplay.Text = $"Error adding files to CSV: {ex.Message}";
+        }
+        finally
+        {
+            addYDriveToReextractButton.IsEnabled = true;
+        }
+    }
     private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
     {
         // Use regular expression to allow only digits

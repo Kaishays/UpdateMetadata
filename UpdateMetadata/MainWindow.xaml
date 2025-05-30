@@ -265,6 +265,12 @@
                                     Style="{StaticResource ActionButtonStyle}"
                                     Click="GetVideoCountButton_Click"/>
                                     
+                            <!-- Add Y Drive to Reextract CSV Button -->
+                            <Button x:Name="addYDriveToReextractButton" 
+                                    Content="Add All Y Drive TS Files to Reextract CSV" 
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Click="AddYDriveToReextractButton_Click"/>
+                                    
                             <!-- Directory Path and TS File Counter -->
                             <Border Style="{StaticResource SectionBorderStyle}"
                                     MinWidth="320">

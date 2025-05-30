@@ -8,6 +8,9 @@ namespace UpdateMetadata
 {
     public static class RuntimeVariables
     {
+        public const string failKlvValidationCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\ReextractKlv.csv";
+        public const string countErrorsCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\CountFailCheck.csv";
+
         public static int delayMonitorVideoPlayerState = 1500;
 
         public const int maxFrameRate = 65;
