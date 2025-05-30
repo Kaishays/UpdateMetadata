@@ -55,7 +55,14 @@ namespace UpdateMetadata.WriteDatabase
         }
         public static string ConvertToSQlFormat(string path)
         {
-            return path.Replace("\\", "/");
+            return ConvertBackslashesToForwardSlashes(path);
+        }
+        public static string ConvertBackslashesToForwardSlashes(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return path;
+                
+            return System.Text.RegularExpressions.Regex.Replace(path, @"\\+", "/");
         }
         public static string BuildSQL_Local(string tsFilePath, ulong VidID)
         {
@@ -67,8 +74,8 @@ namespace UpdateMetadata.WriteDatabase
             string sqlQuery = $@"
                 LOAD DATA LOCAL INFILE '{tsFilePath}'
                 INTO TABLE raw_metadata
-                FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '""'
-                LINES TERMINATED BY '\n'
+                FIELDS TERMINATED BY ',' ENCLOSED BY '""'
+                LINES TERMINATED BY '\r\n'
                 IGNORE 1 LINES
                 (
                    @rawUtcTime,
@@ -93,8 +100,10 @@ namespace UpdateMetadata.WriteDatabase
                    SlantRange_m
                 )
                 SET UtcTime = STR_TO_DATE(@rawUtcTime, '%Y-%m-%dT%H:%i:%s.%fZ'),
-                    FrameIndex = DEFAULT,
                     UniqueVideoID = {VidID};";
+
+
+
 
             return sqlQuery;
         }

@@ -12,10 +12,13 @@ namespace UpdateMetadata.tests
         public bool HasValidCsvVideoRatio { get; set; }
         public bool HasValidUtcTimestamps { get; set; }
         public bool CsvDataTooLong { get; set; }
+        public bool HasTwoConsecutiveHashesMatch { get; set; }
         public bool ShouldWriteMetadataToDB => !HasRawMetadataInDb &&
                                     HasValidCsvVideoRatio &&
-                                    HasValidUtcTimestamps;
+                                    HasValidUtcTimestamps &&
+                                    HasTwoConsecutiveHashesMatch;
         public bool ShouldReextract => !HasValidCsvVideoRatio ||
-                                        !HasValidUtcTimestamps;
+                                        !HasValidUtcTimestamps ||
+                                        !HasTwoConsecutiveHashesMatch;
     }
 }

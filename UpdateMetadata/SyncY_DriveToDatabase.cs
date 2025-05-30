@@ -11,6 +11,7 @@ using UpdateMetadata.WriteDatabase;
 using System.Configuration;
 using UpdateMetadata.RawMetadata;
 using System.Runtime.CompilerServices;
+using UpdateMetadata.RunLogHashing;
 
 namespace UpdateMetadata
 {
@@ -38,7 +39,9 @@ namespace UpdateMetadata
                 Debug.WriteLine("Updating Path To Video");
                 await PathToVideoUpdater.UpdatePathToVideo();
 
-                Debug.WriteLine("Updating Raw Metadata. Will print <Done> when complete");
+                await HashLogUpdater.UpdateHashLogs();
+
+                Debug.WriteLine("Updating Raw Metadata. Will print \"Done\" when complete");
                 await RawMetadataUpdater.UpdateRawMetadata();
 
                 await ManageCompress.CompressRawMetadata();

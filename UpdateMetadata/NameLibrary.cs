@@ -25,27 +25,26 @@ namespace UpdateMetadata
             #region RawMetadata
             Tables.RawMetadata.tableName = await Tables.GetTableNames(3).ConfigureAwait(false);
             Tables.RawMetadata.column1_UniqueVideoID = await Tables.GetColumnNamesLogic(3, 0).ConfigureAwait(false);
-            Tables.RawMetadata.column2_FrameIndex = await Tables.GetColumnNamesLogic(3, 1).ConfigureAwait(false);
-            Tables.RawMetadata.column3_UtcTime = await Tables.GetColumnNamesLogic(3, 2).ConfigureAwait(false);
-            Tables.RawMetadata.column4_PlatformHeading = await Tables.GetColumnNamesLogic(3, 3).ConfigureAwait(false);
-            Tables.RawMetadata.column5_PlatformPitch = await Tables.GetColumnNamesLogic(3, 4).ConfigureAwait(false);
-            Tables.RawMetadata.column6_PlatformRoll = await Tables.GetColumnNamesLogic(3, 5).ConfigureAwait(false);
-            Tables.RawMetadata.column7_SensorName = await Tables.GetColumnNamesLogic(3, 6).ConfigureAwait(false);
-            Tables.RawMetadata.column8_SensorLatitude = await Tables.GetColumnNamesLogic(3, 7).ConfigureAwait(false);
-            Tables.RawMetadata.column9_SensorLongitude = await Tables.GetColumnNamesLogic(3, 8).ConfigureAwait(false);
-            Tables.RawMetadata.column10_SensorAltitude_m = await Tables.GetColumnNamesLogic(3, 9).ConfigureAwait(false);
-            Tables.RawMetadata.column11_SensorRelativeRoll = await Tables.GetColumnNamesLogic(3, 10).ConfigureAwait(false);
-            Tables.RawMetadata.column12_SensorRelativeAzimuth = await Tables.GetColumnNamesLogic(3, 11).ConfigureAwait(false);
-            Tables.RawMetadata.column13_SensorRelativeElevation = await Tables.GetColumnNamesLogic(3, 12).ConfigureAwait(false);
-            Tables.RawMetadata.column14_SensorHorizontalFovDegrees = await Tables.GetColumnNamesLogic(3, 13).ConfigureAwait(false);
-            Tables.RawMetadata.column15_SensorVerticalFovDegrees = await Tables.GetColumnNamesLogic(3, 14).ConfigureAwait(false);
-            Tables.RawMetadata.column16_FrameElevation = await Tables.GetColumnNamesLogic(3, 15).ConfigureAwait(false);
-            Tables.RawMetadata.column17_FrameLat = await Tables.GetColumnNamesLogic(3, 16).ConfigureAwait(false);
-            Tables.RawMetadata.column18_FrameLon = await Tables.GetColumnNamesLogic(3, 17).ConfigureAwait(false);
-            Tables.RawMetadata.column19_TargetLat = await Tables.GetColumnNamesLogic(3, 18).ConfigureAwait(false);
-            Tables.RawMetadata.column20_TargetLon = await Tables.GetColumnNamesLogic(3, 19).ConfigureAwait(false);
-            Tables.RawMetadata.column21_TargetElevation = await Tables.GetColumnNamesLogic(3, 20).ConfigureAwait(false);
-            Tables.RawMetadata.column22_SlantRange_m = await Tables.GetColumnNamesLogic(3, 21).ConfigureAwait(false);
+            Tables.RawMetadata.column2_UtcTime = await Tables.GetColumnNamesLogic(3, 1).ConfigureAwait(false);
+            Tables.RawMetadata.column3_PlatformHeading = await Tables.GetColumnNamesLogic(3, 2).ConfigureAwait(false);
+            Tables.RawMetadata.column4_PlatformPitch = await Tables.GetColumnNamesLogic(3, 3).ConfigureAwait(false);
+            Tables.RawMetadata.column5_PlatformRoll = await Tables.GetColumnNamesLogic(3, 4).ConfigureAwait(false);
+            Tables.RawMetadata.column6_SensorName = await Tables.GetColumnNamesLogic(3, 5).ConfigureAwait(false);
+            Tables.RawMetadata.column7_SensorLatitude = await Tables.GetColumnNamesLogic(3, 6).ConfigureAwait(false);
+            Tables.RawMetadata.column8_SensorLongitude = await Tables.GetColumnNamesLogic(3, 7).ConfigureAwait(false);
+            Tables.RawMetadata.column9_SensorAltitude_m = await Tables.GetColumnNamesLogic(3, 8).ConfigureAwait(false);
+            Tables.RawMetadata.column10_SensorRelativeRoll = await Tables.GetColumnNamesLogic(3, 9).ConfigureAwait(false);
+            Tables.RawMetadata.column11_SensorRelativeAzimuth = await Tables.GetColumnNamesLogic(3, 10).ConfigureAwait(false);
+            Tables.RawMetadata.column12_SensorRelativeElevation = await Tables.GetColumnNamesLogic(3, 11).ConfigureAwait(false);
+            Tables.RawMetadata.column13_SensorHorizontalFovDegrees = await Tables.GetColumnNamesLogic(3, 12).ConfigureAwait(false);
+            Tables.RawMetadata.column14_SensorVerticalFovDegrees = await Tables.GetColumnNamesLogic(3, 13).ConfigureAwait(false);
+            Tables.RawMetadata.column15_FrameElevation = await Tables.GetColumnNamesLogic(3, 14).ConfigureAwait(false);
+            Tables.RawMetadata.column16_FrameLat = await Tables.GetColumnNamesLogic(3, 15).ConfigureAwait(false);
+            Tables.RawMetadata.column17_FrameLon = await Tables.GetColumnNamesLogic(3, 16).ConfigureAwait(false);
+            Tables.RawMetadata.column18_TargetLat = await Tables.GetColumnNamesLogic(3, 17).ConfigureAwait(false);
+            Tables.RawMetadata.column19_TargetLon = await Tables.GetColumnNamesLogic(3, 18).ConfigureAwait(false);
+            Tables.RawMetadata.column20_TargetElevation = await Tables.GetColumnNamesLogic(3, 19).ConfigureAwait(false);
+            Tables.RawMetadata.column21_SlantRange_m = await Tables.GetColumnNamesLogic(3, 20).ConfigureAwait(false);
             #endregion
             #region VideoID
             Tables.VideoID.tableName = await Tables.GetTableNames(4).ConfigureAwait(false);
@@ -78,10 +77,6 @@ namespace UpdateMetadata
                 // Minimum and maximum for UniqueVideoID
                 public static string UniqueVideoID_min { get; set; } = "UniqueVideoID_min";
                 public static string UniqueVideoID_max { get; set; } = "UniqueVideoID_max";
-
-                // Frame index minimum and maximum
-                public static string FrameIndex_min { get; set; } = "FrameIndex_min";
-                public static string FrameIndex_max { get; set; } = "FrameIndex_max";
 
                 // UTC time minimum and maximum
                 public static string UtcTime_min { get; set; } = "UtcTime_min";
@@ -150,27 +145,26 @@ namespace UpdateMetadata
             {
                 public static string? tableName { get; set; }
                 public static string? column1_UniqueVideoID { get; set; }
-                public static string? column2_FrameIndex { get; set; }
-                public static string? column3_UtcTime { get; set; }
-                public static string? column4_PlatformHeading { get; set; }
-                public static string? column5_PlatformPitch { get; set; }
-                public static string? column6_PlatformRoll { get; set; }
-                public static string? column7_SensorName { get; set; }
-                public static string? column8_SensorLatitude { get; set; }
-                public static string? column9_SensorLongitude { get; set; }
-                public static string? column10_SensorAltitude_m { get; set; }
-                public static string? column11_SensorRelativeRoll { get; set; }
-                public static string? column12_SensorRelativeAzimuth { get; set; }
-                public static string? column13_SensorRelativeElevation { get; set; }
-                public static string? column14_SensorHorizontalFovDegrees { get; set; }
-                public static string? column15_SensorVerticalFovDegrees { get; set; }
-                public static string? column16_FrameElevation { get; set; }
-                public static string? column17_FrameLat { get; set; }
-                public static string? column18_FrameLon { get; set; }
-                public static string? column19_TargetLat { get; set; }
-                public static string? column20_TargetLon { get; set; }
-                public static string? column21_TargetElevation { get; set; }
-                public static string? column22_SlantRange_m { get; set; }
+                public static string? column2_UtcTime { get; set; }
+                public static string? column3_PlatformHeading { get; set; }
+                public static string? column4_PlatformPitch { get; set; }
+                public static string? column5_PlatformRoll { get; set; }
+                public static string? column6_SensorName { get; set; }
+                public static string? column7_SensorLatitude { get; set; }
+                public static string? column8_SensorLongitude { get; set; }
+                public static string? column9_SensorAltitude_m { get; set; }
+                public static string? column10_SensorRelativeRoll { get; set; }
+                public static string? column11_SensorRelativeAzimuth { get; set; }
+                public static string? column12_SensorRelativeElevation { get; set; }
+                public static string? column13_SensorHorizontalFovDegrees { get; set; }
+                public static string? column14_SensorVerticalFovDegrees { get; set; }
+                public static string? column15_FrameElevation { get; set; }
+                public static string? column16_FrameLat { get; set; }
+                public static string? column17_FrameLon { get; set; }
+                public static string? column18_TargetLat { get; set; }
+                public static string? column19_TargetLon { get; set; }
+                public static string? column20_TargetElevation { get; set; }
+                public static string? column21_SlantRange_m { get; set; }
             }
             public static class VideoID
             {
@@ -210,6 +204,14 @@ namespace UpdateMetadata
                 public static string? column1_UniqueDatasetID { get; set; } = "UniqueDatasetID";
                 public static string? column2_DatasetName { get; set; } = "datasetName";
                 public static string? column3_pathToDataset { get; set; } = "pathToDataset";
+            }
+            public static class ZExtractionLogs
+            {
+                public static string tableName { get; set; } = "z_extractionlogs";
+                public static string UniqueVideoID { get; set; } = "UniqueVideoID";
+                public static string CsvHash { get; set; } = "CsvHash";
+                public static string RunIndex { get; set; } = "Run_Index";
+                public static string WriteTime { get; set; } = "WriteTime";
             }
             public static async Task<string> GetTableNames(int tableIndex)
             {
@@ -429,7 +431,6 @@ namespace UpdateMetadata
         public class RawMetadata
         {
             public ulong UniqueVideoID { get; set; }
-            public int FrameIndex { get; set; }
             public DateTime UtcTime { get; set; }
             public double PlatformHeading { get; set; }
             public double PlatformPitch { get; set; }
@@ -487,6 +488,13 @@ namespace UpdateMetadata
             public double SlantRange_m { get; set; }
             public string ParentVidPath { get; set; }
         }
+        public class z_extractionlogs
+        {
+            public ulong UniqueVideoID { get; set; }
+            public string CsvHash { get; set; }
+            public uint RunIndex { get; set; }
+            public DateTime WriteTime { get; set; }
+        }
     }
     public static class SQL_QueriesStore
     {
@@ -503,8 +511,6 @@ namespace UpdateMetadata
                 INSERT INTO metadatabase.compressed_metadata
                 (
                     UniqueVideoID,
-                    FrameIndex_min,
-                    FrameIndex_max,
                     UtcTime_min,
                     UtcTime_max,
                     PlatformHeading_min,
@@ -548,8 +554,6 @@ namespace UpdateMetadata
                 VALUES
                 (
                     @UniqueVideoID,
-                    @FrameIndex_min,
-                    @FrameIndex_max,
                     @UtcTime_min,
                     @UtcTime_max,
                     @PlatformHeading_min,
@@ -589,13 +593,11 @@ namespace UpdateMetadata
                     @TargetElevation_max,
                     @SlantRange_m_min,
                     @SlantRange_m_max
-                    );
-                    ";
+                );
+            ";
             public static string calcForOneVidID = @"
                 SELECT 
                 UniqueVideoID,
-                MIN(FrameIndex) AS FrameIndex_min,
-                MAX(FrameIndex) AS FrameIndex_max,
                 MIN(UtcTime) AS UtcTime_min,
                 MAX(UtcTime) AS UtcTime_max,
                 MIN(PlatformHeading) AS PlatformHeading_min,
@@ -650,49 +652,47 @@ namespace UpdateMetadata
         {
             public static string addTo = $"INSERT INTO {NameLibrary.Tables.RawMetadata.tableName} " +
              $"({NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}, " +
-             $"{NameLibrary.Tables.RawMetadata.column2_FrameIndex}, " +
-             $"{NameLibrary.Tables.RawMetadata.column3_UtcTime}, " +
-             $"{NameLibrary.Tables.RawMetadata.column4_PlatformHeading}, " +
-             $"{NameLibrary.Tables.RawMetadata.column5_PlatformPitch}, " +
-             $"{NameLibrary.Tables.RawMetadata.column6_PlatformRoll}, " +
-             $"{NameLibrary.Tables.RawMetadata.column7_SensorName}, " +
-             $"{NameLibrary.Tables.RawMetadata.column8_SensorLatitude}, " +
-             $"{NameLibrary.Tables.RawMetadata.column9_SensorLongitude}, " +
-             $"{NameLibrary.Tables.RawMetadata.column10_SensorAltitude_m}, " +
-             $"{NameLibrary.Tables.RawMetadata.column11_SensorRelativeRoll}, " +
-             $"{NameLibrary.Tables.RawMetadata.column12_SensorRelativeAzimuth}, " +
-             $"{NameLibrary.Tables.RawMetadata.column13_SensorRelativeElevation}, " +
-             $"{NameLibrary.Tables.RawMetadata.column14_SensorHorizontalFovDegrees}, " +
-             $"{NameLibrary.Tables.RawMetadata.column15_SensorVerticalFovDegrees}, " +
-             $"{NameLibrary.Tables.RawMetadata.column16_FrameElevation}, " +
-             $"{NameLibrary.Tables.RawMetadata.column17_FrameLat}, " +
-             $"{NameLibrary.Tables.RawMetadata.column18_FrameLon}, " +
-             $"{NameLibrary.Tables.RawMetadata.column19_TargetLat}, " +
-             $"{NameLibrary.Tables.RawMetadata.column20_TargetLon}, " +
-             $"{NameLibrary.Tables.RawMetadata.column21_TargetElevation}, " +
-             $"{NameLibrary.Tables.RawMetadata.column22_SlantRange_m}) " +
+             $"{NameLibrary.Tables.RawMetadata.column2_UtcTime}, " +
+             $"{NameLibrary.Tables.RawMetadata.column3_PlatformHeading}, " +
+             $"{NameLibrary.Tables.RawMetadata.column4_PlatformPitch}, " +
+             $"{NameLibrary.Tables.RawMetadata.column5_PlatformRoll}, " +
+             $"{NameLibrary.Tables.RawMetadata.column6_SensorName}, " +
+             $"{NameLibrary.Tables.RawMetadata.column7_SensorLatitude}, " +
+             $"{NameLibrary.Tables.RawMetadata.column8_SensorLongitude}, " +
+             $"{NameLibrary.Tables.RawMetadata.column9_SensorAltitude_m}, " +
+             $"{NameLibrary.Tables.RawMetadata.column10_SensorRelativeRoll}, " +
+             $"{NameLibrary.Tables.RawMetadata.column11_SensorRelativeAzimuth}, " +
+             $"{NameLibrary.Tables.RawMetadata.column12_SensorRelativeElevation}, " +
+             $"{NameLibrary.Tables.RawMetadata.column13_SensorHorizontalFovDegrees}, " +
+             $"{NameLibrary.Tables.RawMetadata.column14_SensorVerticalFovDegrees}, " +
+             $"{NameLibrary.Tables.RawMetadata.column15_FrameElevation}, " +
+             $"{NameLibrary.Tables.RawMetadata.column16_FrameLat}, " +
+             $"{NameLibrary.Tables.RawMetadata.column17_FrameLon}, " +
+             $"{NameLibrary.Tables.RawMetadata.column18_TargetLat}, " +
+             $"{NameLibrary.Tables.RawMetadata.column19_TargetLon}, " +
+             $"{NameLibrary.Tables.RawMetadata.column20_TargetElevation}, " +
+             $"{NameLibrary.Tables.RawMetadata.column21_SlantRange_m}) " +
              $"VALUES (@{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column2_FrameIndex}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column3_UtcTime}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column4_PlatformHeading}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column5_PlatformPitch}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column6_PlatformRoll}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column7_SensorName}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column8_SensorLatitude}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column9_SensorLongitude}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column10_SensorAltitude_m}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column11_SensorRelativeRoll}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column12_SensorRelativeAzimuth}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column13_SensorRelativeElevation}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column14_SensorHorizontalFovDegrees}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column15_SensorVerticalFovDegrees}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column16_FrameElevation}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column17_FrameLat}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column18_FrameLon}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column19_TargetLat}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column20_TargetLon}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column21_TargetElevation}, " +
-             $"@{NameLibrary.Tables.RawMetadata.column22_SlantRange_m})";
+             $"@{NameLibrary.Tables.RawMetadata.column2_UtcTime}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column3_PlatformHeading}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column4_PlatformPitch}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column5_PlatformRoll}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column6_SensorName}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column7_SensorLatitude}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column8_SensorLongitude}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column9_SensorAltitude_m}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column10_SensorRelativeRoll}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column11_SensorRelativeAzimuth}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column12_SensorRelativeElevation}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column13_SensorHorizontalFovDegrees}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column14_SensorVerticalFovDegrees}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column15_FrameElevation}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column16_FrameLat}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column17_FrameLon}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column18_TargetLat}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column19_TargetLon}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column20_TargetElevation}, " +
+             $"@{NameLibrary.Tables.RawMetadata.column21_SlantRange_m})";
             public static string deleteFrom = $"DELETE FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
             public static string getRowCount = $"SELECT COUNT(*) AS RowCount FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.VideoID.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
             public static string insertCSV = $@"
@@ -724,7 +724,6 @@ namespace UpdateMetadata
                   SlantRange_m
                 )
                 SET UtcTime = STR_TO_DATE(@rawUtcTime, '%Y-%m-%dT%H:%i:%s.%fZ'),
-                    FrameIndex = DEFAULT,
                     UniqueVideoID = 'VidID';
                 ";
             public static string getRows = $"SELECT * FROM metadatabase.{NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.VideoID.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
@@ -1051,26 +1050,32 @@ namespace UpdateMetadata
         }
         public static class GraphQueries
         {
-            public static string getUtcTime = $"SELECT {NameLibrary.Tables.RawMetadata.column3_UtcTime} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getPlatformHeading = $"SELECT {NameLibrary.Tables.RawMetadata.column4_PlatformHeading} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getPlatformPitch = $"SELECT {NameLibrary.Tables.RawMetadata.column5_PlatformPitch} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getPlatformRoll = $"SELECT {NameLibrary.Tables.RawMetadata.column6_PlatformRoll} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorName = $"SELECT {NameLibrary.Tables.RawMetadata.column7_SensorName} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorLatitude = $"SELECT {NameLibrary.Tables.RawMetadata.column8_SensorLatitude} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorLongitude = $"SELECT {NameLibrary.Tables.RawMetadata.column9_SensorLongitude} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorAltitude_m = $"SELECT {NameLibrary.Tables.RawMetadata.column10_SensorAltitude_m} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorRelativeRoll = $"SELECT {NameLibrary.Tables.RawMetadata.column11_SensorRelativeRoll} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorRelativeAzimuth = $"SELECT {NameLibrary.Tables.RawMetadata.column12_SensorRelativeAzimuth} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorRelativeElevation = $"SELECT {NameLibrary.Tables.RawMetadata.column13_SensorRelativeElevation} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorHorizontalFovDegrees = $"SELECT {NameLibrary.Tables.RawMetadata.column14_SensorHorizontalFovDegrees} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSensorVerticalFovDegrees = $"SELECT {NameLibrary.Tables.RawMetadata.column15_SensorVerticalFovDegrees} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getFrameElevation = $"SELECT {NameLibrary.Tables.RawMetadata.column16_FrameElevation} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getFrameLat = $"SELECT {NameLibrary.Tables.RawMetadata.column17_FrameLat} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getFrameLon = $"SELECT {NameLibrary.Tables.RawMetadata.column18_FrameLon} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getTargetLat = $"SELECT {NameLibrary.Tables.RawMetadata.column19_TargetLat} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getTargetLon = $"SELECT {NameLibrary.Tables.RawMetadata.column20_TargetLon} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getTargetElevation = $"SELECT {NameLibrary.Tables.RawMetadata.column21_TargetElevation} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
-            public static string getSlantRange_m = $"SELECT {NameLibrary.Tables.RawMetadata.column22_SlantRange_m} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getUtcTime = $"SELECT {NameLibrary.Tables.RawMetadata.column2_UtcTime} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getPlatformHeading = $"SELECT {NameLibrary.Tables.RawMetadata.column3_PlatformHeading} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getPlatformPitch = $"SELECT {NameLibrary.Tables.RawMetadata.column4_PlatformPitch} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getPlatformRoll = $"SELECT {NameLibrary.Tables.RawMetadata.column5_PlatformRoll} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorName = $"SELECT {NameLibrary.Tables.RawMetadata.column6_SensorName} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorLatitude = $"SELECT {NameLibrary.Tables.RawMetadata.column7_SensorLatitude} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorLongitude = $"SELECT {NameLibrary.Tables.RawMetadata.column8_SensorLongitude} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorAltitude_m = $"SELECT {NameLibrary.Tables.RawMetadata.column9_SensorAltitude_m} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorRelativeRoll = $"SELECT {NameLibrary.Tables.RawMetadata.column10_SensorRelativeRoll} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorRelativeAzimuth = $"SELECT {NameLibrary.Tables.RawMetadata.column11_SensorRelativeAzimuth} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorRelativeElevation = $"SELECT {NameLibrary.Tables.RawMetadata.column12_SensorRelativeElevation} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorHorizontalFovDegrees = $"SELECT {NameLibrary.Tables.RawMetadata.column13_SensorHorizontalFovDegrees} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSensorVerticalFovDegrees = $"SELECT {NameLibrary.Tables.RawMetadata.column14_SensorVerticalFovDegrees} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getFrameElevation = $"SELECT {NameLibrary.Tables.RawMetadata.column15_FrameElevation} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getFrameLat = $"SELECT {NameLibrary.Tables.RawMetadata.column16_FrameLat} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getFrameLon = $"SELECT {NameLibrary.Tables.RawMetadata.column17_FrameLon} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getTargetLat = $"SELECT {NameLibrary.Tables.RawMetadata.column18_TargetLat} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getTargetLon = $"SELECT {NameLibrary.Tables.RawMetadata.column19_TargetLon} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getTargetElevation = $"SELECT {NameLibrary.Tables.RawMetadata.column20_TargetElevation} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+            public static string getSlantRange_m = $"SELECT {NameLibrary.Tables.RawMetadata.column21_SlantRange_m} FROM {NameLibrary.Tables.RawMetadata.tableName} WHERE {NameLibrary.Tables.RawMetadata.column1_UniqueVideoID} = @{NameLibrary.Tables.RawMetadata.column1_UniqueVideoID}";
+        }
+        public static class ZExtractionLogs
+        {
+            public static string getAllWriteTimes = $"SELECT {NameLibrary.Tables.ZExtractionLogs.WriteTime} FROM {NameLibrary.Tables.ZExtractionLogs.tableName} WHERE {NameLibrary.Tables.ZExtractionLogs.UniqueVideoID} = @{NameLibrary.Tables.ZExtractionLogs.UniqueVideoID}";
+            public static string selectAll = $"SELECT * FROM {NameLibrary.Tables.ZExtractionLogs.tableName} WHERE {NameLibrary.Tables.ZExtractionLogs.UniqueVideoID} = @{NameLibrary.Tables.ZExtractionLogs.UniqueVideoID}";
+            public static string addTo = $"INSERT INTO {NameLibrary.Tables.ZExtractionLogs.tableName} ({NameLibrary.Tables.ZExtractionLogs.UniqueVideoID}, {NameLibrary.Tables.ZExtractionLogs.CsvHash}, {NameLibrary.Tables.ZExtractionLogs.RunIndex}, {NameLibrary.Tables.ZExtractionLogs.WriteTime}) VALUES (@{NameLibrary.Tables.ZExtractionLogs.UniqueVideoID}, @{NameLibrary.Tables.ZExtractionLogs.CsvHash}, @{NameLibrary.Tables.ZExtractionLogs.RunIndex}, @{NameLibrary.Tables.ZExtractionLogs.WriteTime})";
         }
     }
 }

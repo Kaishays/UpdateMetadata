@@ -15,13 +15,10 @@ namespace UpdateMetadata.Y_DriveReader
         {
             List<TableInstances.RawMetadata> allFrames_RawMetadataList = new List<TableInstances.RawMetadata>();
             TableInstances.RawMetadata rawMetadata;
-            int frameIndex = 0;
             foreach (string[] frameMetadata in allFramesInCSV)
             {
                 rawMetadata = new TableInstances.RawMetadata();
                 rawMetadata.UniqueVideoID = videoID_FromDatabase.UniqueVideoID;
-                rawMetadata.FrameIndex = frameIndex;
-                frameIndex++;
                 rawMetadata.UtcTime = ParseUtcTime(frameMetadata[0]);
                 rawMetadata.PlatformHeading = double.Parse(frameMetadata[1]);
                 rawMetadata.PlatformPitch = double.Parse(frameMetadata[2]);

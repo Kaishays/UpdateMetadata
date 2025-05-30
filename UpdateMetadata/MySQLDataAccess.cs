@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Dapper;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;

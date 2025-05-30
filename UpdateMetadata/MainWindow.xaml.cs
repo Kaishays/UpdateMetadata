@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Application = System.Windows.Application;
 using UpdateMetadata.CompressKlvMetadata;
+using UpdateMetadata.WriteDatabase;
 namespace UpdateMetadata;
 
 /// <summary>
@@ -85,25 +86,18 @@ public partial class MainWindow : Window
     private async void 
     ForDebugOnly_SingleFileCheckButton_Click(object sender, RoutedEventArgs e)
     {
+
         //  Y:\Flight Tests\AC10\Rockwell Collins Flight 17Mar15\video_17March15\Alticam_2015_3_17_14_6_30.ts
         // in Db = '29476'
         statusDisplay.Text = "Single file check initiated...";
         TableInstances.VideoID videoId = new TableInstances.VideoID();
-        videoId.UniqueVideoID = 5348024557550169;
-
-        await ManageCompress.TryCompressRawMetadata(videoId);
-
-
-
-
-
-
-
-
+     
         videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06 CLT EOMW\\\\2024\\\\2024_03_18_12_13_16 ScanEagle LD\\\\CH1_2024_03_18_13_45_38.ts";
         videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06EOIR2\\\\2024_11_06_16_21_06 EOIR2 1.2.1 Roll Tilt checkout\\\\Clip_CH1_2024_11_06_16_39_35.ts";
-       // videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH0_2022_04_07_13_47_37.ts";
+        // videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 06\\\\2022_04_07_13_20_24_06EOIR_Local\\\\CH0_2022_04_07_13_47_37.ts";
         //videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam CLT LWIR\\\\4_4_19 Flight_Test\\\\Alticam_CH1__2019_04_04_13_05_02(1).ts";
+        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 14\\\\2018\\\\Flight Test 24October18\\\\Video\\\\Alticam_CH1__2018_10_29_14_48_02.ts";
+        videoId.PathToVideo = @"Y:\\\\Flight Tests\\\\Alticam 14\\\\2022\\\\2022_5_21_Marinelife_Monterey\\\\AC14_Whales_rd2_2022_05_22_15_46_32\\\\PodSwimming_CH1_2022_05_22_16_58_58.ts";
         string sql = "SELECT UniqueVideoID FROM metadatabase.video_id WHERE PathToVideo LIKE '%" + videoId.PathToVideo + "%'";
         List<ulong> temp = await MySQLDataAccess.QuerySQL<ulong>(sql, NameLibrary.General.connectionString);
         videoId.UniqueVideoID = temp[0];

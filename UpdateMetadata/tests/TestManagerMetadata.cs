@@ -28,6 +28,9 @@ namespace UpdateMetadata.tests
             results.HasValidUtcTimestamps = await UtcTimeTest
                 .ValidateUtcTimestamps(csvFilePath);
 
+            results.HasTwoConsecutiveHashesMatch = await TestTwoConsecutiveHashes
+                .DoTwoConsecutiveHashesMatch(videoId.UniqueVideoID);
+
             return results;
         }
 

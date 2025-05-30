@@ -14,10 +14,6 @@ namespace UpdateMetadata.CompressKlvMetadata
             // Unique identifier for the video.
             public ulong UniqueVideoID { get; set; }
 
-            // Frame index minimum and maximum.
-            public int? FrameIndex_min { get; set; }
-            public int? FrameIndex_max { get; set; }
-
             // UTC time minimum and maximum.
             public DateTime? UtcTime_min { get; set; }
             public DateTime? UtcTime_max { get; set; }
