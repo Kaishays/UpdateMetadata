@@ -8,7 +8,7 @@ namespace UpdateMetadata.RunLogHashing
 {
     public static class HashLogUpdater
     {
-        public static async Task UpdateHashLogs()
+        public static async Task UpdateCsvHashLogs()
         {
             List<TableInstances.VideoID> databaseVideoIds = SyncY_DriveToDatabase.databaseList_VideoID;
             Debug.WriteLine($"Updating hash logs for {databaseVideoIds.Count} video IDs");

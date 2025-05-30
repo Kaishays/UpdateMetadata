@@ -41,7 +41,7 @@ namespace UpdateMetadata.WriteDatabase
                         }
                         catch
                         {
-                        
+
                         }
                 }
             }
@@ -66,11 +66,10 @@ namespace UpdateMetadata.WriteDatabase
         }
         public static string BuildSQL_Local(string tsFilePath, ulong VidID)
         {
-            // Ensure the file path uses forward slashes for MySQL compatibility
             tsFilePath = ConvertTsToCsvPath(tsFilePath);
             if (!File.Exists(tsFilePath))
                 return "no Csv Found";
-            // Construct the SQL query dynamically
+
             string sqlQuery = $@"
                 LOAD DATA LOCAL INFILE '{tsFilePath}'
                 INTO TABLE raw_metadata
@@ -101,9 +100,6 @@ namespace UpdateMetadata.WriteDatabase
                 )
                 SET UtcTime = STR_TO_DATE(@rawUtcTime, '%Y-%m-%dT%H:%i:%s.%fZ'),
                     UniqueVideoID = {VidID};";
-
-
-
 
             return sqlQuery;
         }

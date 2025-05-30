@@ -19,7 +19,7 @@ namespace UpdateMetadata
         private static int invalidUtcTimestampsCount = 0;
         private static int csvFileTooLongCount = 0;
         private static int invalidCsvHashCount = 0;
-        private const string failKlvValidationCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\FailCheck.csv";
+        private const string failKlvValidationCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\ReextractKlv.csv";
         private const string countErrorsCsvPath = @"S:\Projects\AltiCam Vision\Software (MSP & GUI)\KLV_Metadata_Extraction\CountFailCheck.csv";
 
         public static void LogMissingCsvFile(int errorCode, string videoPath)

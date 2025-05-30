@@ -39,7 +39,9 @@ namespace UpdateMetadata
                 Debug.WriteLine("Updating Path To Video");
                 await PathToVideoUpdater.UpdatePathToVideo();
 
-                await HashLogUpdater.UpdateHashLogs();
+                Debug.WriteLine("Updating Csv Hash Logs");
+
+                await HashLogUpdater.UpdateCsvHashLogs();
 
                 Debug.WriteLine("Updating Raw Metadata. Will print \"Done\" when complete");
                 await RawMetadataUpdater.UpdateRawMetadata();
