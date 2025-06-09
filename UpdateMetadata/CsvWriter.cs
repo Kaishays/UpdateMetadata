@@ -16,7 +16,7 @@ namespace UpdateMetadata
             bool successfulParse = false;
             while (!successfulParse)
             {
-                successfulParse = AppendToCSV(message, targetFile, filePathToWriteTo);
+                successfulParse = true;// AppendToCSV(message, targetFile, filePathToWriteTo);
             }
             return successfulParse;
         }

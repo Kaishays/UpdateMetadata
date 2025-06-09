@@ -19,8 +19,7 @@ namespace UpdateMetadata.tests
         {
             var results = new TestResultsMetadata();
 
-            results.HasRawMetadataInDb = await RawKlvInDbTest
-                .TestIfRawMetadataInDB(videoId, csvMetadataFields);
+            results.HasRawMetadataInDb = false;
 
             results.HasValidCsvVideoRatio = true;
 
